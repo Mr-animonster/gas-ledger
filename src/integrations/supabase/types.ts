@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      consumers: {
+        Row: {
+          address: string | null
+          consumer_no: string
+          created_at: string
+          id: string
+          mobile_no: string | null
+          name: string
+          scheme: Database["public"]["Enums"]["consumer_scheme"]
+        }
+        Insert: {
+          address?: string | null
+          consumer_no: string
+          created_at?: string
+          id?: string
+          mobile_no?: string | null
+          name: string
+          scheme?: Database["public"]["Enums"]["consumer_scheme"]
+        }
+        Update: {
+          address?: string | null
+          consumer_no?: string
+          created_at?: string
+          id?: string
+          mobile_no?: string | null
+          name?: string
+          scheme?: Database["public"]["Enums"]["consumer_scheme"]
+        }
+        Relationships: []
+      }
       distributor_otps: {
         Row: {
           code: string
@@ -71,6 +101,30 @@ export type Database = {
         }
         Relationships: []
       }
+      package_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          id: string
+          sort_order: number
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          id?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       staff: {
         Row: {
           active: boolean
@@ -103,6 +157,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      consumer_scheme: "Regular" | "PMUY" | "Extended PMUY" | "PMUY-2"
       staff_role: "godown" | "computer_staff" | "distributor"
     }
     CompositeTypes: {
@@ -231,6 +286,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      consumer_scheme: ["Regular", "PMUY", "Extended PMUY", "PMUY-2"],
       staff_role: ["godown", "computer_staff", "distributor"],
     },
   },
