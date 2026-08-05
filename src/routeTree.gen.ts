@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as RoleRouteImport } from './routes/role'
+import { Route as RegistersSalesRouteImport } from './routes/registers/sales'
 import { Route as RegistersSqcRouteImport } from './routes/registers/sqc'
 import { Route as RegistersStockRouteImport } from './routes/registers/stock'
 
@@ -30,6 +31,11 @@ const RoleRoute = RoleRouteImport.update({
   path: '/role',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegistersSalesRoute = RegistersSalesRouteImport.update({
+  id: '/registers/sales',
+  path: '/registers/sales',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegistersSqcRoute = RegistersSqcRouteImport.update({
   id: '/registers/sqc',
   path: '/registers/sqc',
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
 }
@@ -60,20 +68,33 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/dashboard' | '/role' | '/registers/sqc' | '/registers/stock'
+    | '/'
+    | '/dashboard'
+    | '/role'
+    | '/registers/sales'
+    | '/registers/sqc'
+    | '/registers/stock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/role' | '/registers/sqc' | '/registers/stock'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/role'
+    | '/registers/sales'
+    | '/registers/sqc'
+    | '/registers/stock'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/role'
+    | '/registers/sales'
     | '/registers/sqc'
     | '/registers/stock'
   fileRoutesById: FileRoutesById
@@ -82,6 +103,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   RoleRoute: typeof RoleRoute
+  RegistersSalesRoute: typeof RegistersSalesRoute
   RegistersSqcRoute: typeof RegistersSqcRoute
   RegistersStockRoute: typeof RegistersStockRoute
 }
@@ -109,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/registers/sales': {
+      id: '/registers/sales'
+      path: '/registers/sales'
+      fullPath: '/registers/sales'
+      preLoaderRoute: typeof RegistersSalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/registers/sqc': {
       id: '/registers/sqc'
       path: '/registers/sqc'
@@ -130,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   RoleRoute: RoleRoute,
+  RegistersSalesRoute: RegistersSalesRoute,
   RegistersSqcRoute: RegistersSqcRoute,
   RegistersStockRoute: RegistersStockRoute,
 }

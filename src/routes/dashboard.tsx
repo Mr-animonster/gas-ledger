@@ -22,6 +22,7 @@ const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = 
     name: "Sales Register",
     hint: "Daily cash memo and refill sales record",
     roles: ["distributor", "computer_staff"],
+    to: "/registers/sales",
   },
   {
     name: "Installation & ARB Register",
