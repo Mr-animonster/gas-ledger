@@ -44,7 +44,8 @@ export async function loginWithAgencyCredentials(agencyId: string, password: str
   }
 
   const session = await getAppSession();
-  await session.update({ authed: true, role: undefined, agencyName: data.agency_name });
+  await session.clear();
+  await session.update({ authed: true, agencyName: data.agency_name });
   return { ok: true as const, agencyName: data.agency_name };
 }
 
