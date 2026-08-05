@@ -16,6 +16,7 @@ const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = 
     name: "SQC Register",
     hint: "Statutory quality checks on refill cylinders",
     roles: ["distributor", "godown"],
+    to: "/registers/sqc",
   },
   {
     name: "Sales Register",
