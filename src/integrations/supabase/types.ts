@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_settings: {
+        Row: {
+          created_at: string
+          key: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          created_at?: string
+          key: string
+          updated_at?: string
+          value: string
+        }
+        Update: {
+          created_at?: string
+          key?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
       consumers: {
         Row: {
           address: string | null
@@ -124,6 +145,134 @@ export type Database = {
           sort_order?: number
         }
         Relationships: []
+      }
+      sqc_entries: {
+        Row: {
+          coming_from: string | null
+          created_at: string
+          filled_by: string | null
+          godown_keeper_signature: string | null
+          id: string
+          invoice_date: string | null
+          invoice_no: string
+          locked: boolean
+          locked_at: string | null
+          proprietor_partner_signature: string | null
+          received_date: string
+          total_cylinders: number
+          transporter: string | null
+          truck_no: string | null
+          updated_at: string
+        }
+        Insert: {
+          coming_from?: string | null
+          created_at?: string
+          filled_by?: string | null
+          godown_keeper_signature?: string | null
+          id?: string
+          invoice_date?: string | null
+          invoice_no: string
+          locked?: boolean
+          locked_at?: string | null
+          proprietor_partner_signature?: string | null
+          received_date?: string
+          total_cylinders?: number
+          transporter?: string | null
+          truck_no?: string | null
+          updated_at?: string
+        }
+        Update: {
+          coming_from?: string | null
+          created_at?: string
+          filled_by?: string | null
+          godown_keeper_signature?: string | null
+          id?: string
+          invoice_date?: string | null
+          invoice_no?: string
+          locked?: boolean
+          locked_at?: string | null
+          proprietor_partner_signature?: string | null
+          received_date?: string
+          total_cylinders?: number
+          transporter?: string | null
+          truck_no?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sqc_entries_filled_by_fkey"
+            columns: ["filled_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sqc_line_items: {
+        Row: {
+          created_at: string
+          cylinder_type_id: string | null
+          dpt_date: string | null
+          gross_weight: number
+          id: string
+          leaky_body_bung: Database["public"]["Enums"]["leaky_location"]
+          observed_weight: number
+          remarks: string | null
+          s_no: number
+          sealing_condition: Database["public"]["Enums"]["sealing_condition"]
+          sqc_entry_id: string
+          tare_weight: number
+          updated_at: string
+          variation: number
+        }
+        Insert: {
+          created_at?: string
+          cylinder_type_id?: string | null
+          dpt_date?: string | null
+          gross_weight?: number
+          id?: string
+          leaky_body_bung?: Database["public"]["Enums"]["leaky_location"]
+          observed_weight?: number
+          remarks?: string | null
+          s_no: number
+          sealing_condition?: Database["public"]["Enums"]["sealing_condition"]
+          sqc_entry_id: string
+          tare_weight?: number
+          updated_at?: string
+          variation?: number
+        }
+        Update: {
+          created_at?: string
+          cylinder_type_id?: string | null
+          dpt_date?: string | null
+          gross_weight?: number
+          id?: string
+          leaky_body_bung?: Database["public"]["Enums"]["leaky_location"]
+          observed_weight?: number
+          remarks?: string | null
+          s_no?: number
+          sealing_condition?: Database["public"]["Enums"]["sealing_condition"]
+          sqc_entry_id?: string
+          tare_weight?: number
+          updated_at?: string
+          variation?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sqc_line_items_cylinder_type_id_fkey"
+            columns: ["cylinder_type_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sqc_line_items_sqc_entry_id_fkey"
+            columns: ["sqc_entry_id"]
+            isOneToOne: false
+            referencedRelation: "sqc_entries"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       staff: {
         Row: {
@@ -260,6 +409,8 @@ export type Database = {
     }
     Enums: {
       consumer_scheme: "Regular" | "PMUY" | "Extended PMUY" | "PMUY-2"
+      leaky_location: "None" | "Body" | "Bung"
+      sealing_condition: "OK" | "Damaged"
       staff_role: "godown" | "computer_staff" | "distributor"
     }
     CompositeTypes: {
@@ -389,6 +540,8 @@ export const Constants = {
   public: {
     Enums: {
       consumer_scheme: ["Regular", "PMUY", "Extended PMUY", "PMUY-2"],
+      leaky_location: ["None", "Body", "Bung"],
+      sealing_condition: ["OK", "Damaged"],
       staff_role: ["godown", "computer_staff", "distributor"],
     },
   },
