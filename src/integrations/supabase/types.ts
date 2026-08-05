@@ -146,6 +146,126 @@ export type Database = {
         }
         Relationships: []
       }
+      sales_batches: {
+        Row: {
+          batch_date: string
+          booklet_page_photo_ref: string | null
+          created_at: string
+          id: string
+          issued_by: string | null
+          locked: boolean
+          locked_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          batch_date?: string
+          booklet_page_photo_ref?: string | null
+          created_at?: string
+          id?: string
+          issued_by?: string | null
+          locked?: boolean
+          locked_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          batch_date?: string
+          booklet_page_photo_ref?: string | null
+          created_at?: string
+          id?: string
+          issued_by?: string | null
+          locked?: boolean
+          locked_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_batches_issued_by_fkey"
+            columns: ["issued_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_entries: {
+        Row: {
+          amount_charged: number
+          batch_id: string
+          cash_memo_no: number
+          consumer_id: string | null
+          consumer_name: string | null
+          consumer_no: string | null
+          created_at: string
+          id: string
+          issued_by: string | null
+          item: Database["public"]["Enums"]["sale_item"]
+          payment_mode: Database["public"]["Enums"]["payment_mode"]
+          pdc_done: boolean
+          quantity: number
+          rate: number
+          sale_date: string
+          updated_at: string
+        }
+        Insert: {
+          amount_charged?: number
+          batch_id: string
+          cash_memo_no?: number
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          id?: string
+          issued_by?: string | null
+          item?: Database["public"]["Enums"]["sale_item"]
+          payment_mode?: Database["public"]["Enums"]["payment_mode"]
+          pdc_done?: boolean
+          quantity?: number
+          rate?: number
+          sale_date?: string
+          updated_at?: string
+        }
+        Update: {
+          amount_charged?: number
+          batch_id?: string
+          cash_memo_no?: number
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          id?: string
+          issued_by?: string | null
+          item?: Database["public"]["Enums"]["sale_item"]
+          payment_mode?: Database["public"]["Enums"]["payment_mode"]
+          pdc_done?: boolean
+          quantity?: number
+          rate?: number
+          sale_date?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_entries_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "sales_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_entries_consumer_id_fkey"
+            columns: ["consumer_id"]
+            isOneToOne: false
+            referencedRelation: "consumers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_entries_issued_by_fkey"
+            columns: ["issued_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sqc_entries: {
         Row: {
           coming_from: string | null
@@ -410,6 +530,8 @@ export type Database = {
     Enums: {
       consumer_scheme: "Regular" | "PMUY" | "Extended PMUY" | "PMUY-2"
       leaky_location: "None" | "Body" | "Bung"
+      payment_mode: "Cash" | "UPI" | "Card"
+      sale_item: "Refill" | "ARB-Other"
       sealing_condition: "OK" | "Damaged"
       staff_role: "godown" | "computer_staff" | "distributor"
     }
@@ -541,6 +663,8 @@ export const Constants = {
     Enums: {
       consumer_scheme: ["Regular", "PMUY", "Extended PMUY", "PMUY-2"],
       leaky_location: ["None", "Body", "Bung"],
+      payment_mode: ["Cash", "UPI", "Card"],
+      sale_item: ["Refill", "ARB-Other"],
       sealing_condition: ["OK", "Damaged"],
       staff_role: ["godown", "computer_staff", "distributor"],
     },
