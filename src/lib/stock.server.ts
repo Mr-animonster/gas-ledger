@@ -78,7 +78,7 @@ export async function loadStockDay(stockDate: string) {
     if (existing) {
       for (const field of NUMERIC_FIELDS) {
         if (field.startsWith("opening_")) continue;
-        base[field] = (existing as Record<string, number>)[field] ?? 0;
+        base[field] = (existing as unknown as Record<string, number>)[field] ?? 0;
       }
     }
 
@@ -102,18 +102,6 @@ export async function loadStockDay(stockDate: string) {
     rows,
   };
 }
-
-export type SaveStockRowInput = {
-  package_code_id: string;
-} & Omit<StockInputs, keyof typeof openingKeys> &
-  Partial<StockInputs>;
-
-const openingKeys = {
-  opening_good_filled: 0,
-  opening_good_empty: 0,
-  opening_defective_filled: 0,
-  opening_defective_empty: 0,
-};
 
 export async function saveStockDay(input: {
   stockDate: string;
