@@ -106,7 +106,7 @@ export async function loadStockDay(stockDate: string) {
 export async function saveStockDay(input: {
   stockDate: string;
   filledBy: string | null;
-  rows: { package_code_id: string; values: Partial<StockInputs> }[];
+  rows: { package_code_id: string; values: { [K in keyof StockInputs]?: number | undefined } }[];
 }) {
   await requireSession();
 
