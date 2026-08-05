@@ -149,6 +149,108 @@ export type Database = {
         }
         Relationships: []
       }
+      stock_entries: {
+        Row: {
+          closing_defective_empty: number
+          closing_defective_filled: number
+          closing_good_empty: number
+          closing_good_filled: number
+          created_at: string
+          defective_item_returned_to_plant: number
+          filled_by: string | null
+          id: string
+          locked: boolean
+          locked_at: string | null
+          newly_identified_defective: number
+          opening_defective_empty: number
+          opening_defective_filled: number
+          opening_good_empty: number
+          opening_good_filled: number
+          package_code_id: string
+          received_from_consumer_against_tv: number
+          received_from_consumer_refill: number
+          received_from_plant: number
+          refill_sale: number
+          returned_to_plant: number
+          stock_date: string
+          sv_additional_issues: number
+          sv_new_issues: number
+          sv_reconnection_issues: number
+          updated_at: string
+        }
+        Insert: {
+          closing_defective_empty?: number
+          closing_defective_filled?: number
+          closing_good_empty?: number
+          closing_good_filled?: number
+          created_at?: string
+          defective_item_returned_to_plant?: number
+          filled_by?: string | null
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          newly_identified_defective?: number
+          opening_defective_empty?: number
+          opening_defective_filled?: number
+          opening_good_empty?: number
+          opening_good_filled?: number
+          package_code_id: string
+          received_from_consumer_against_tv?: number
+          received_from_consumer_refill?: number
+          received_from_plant?: number
+          refill_sale?: number
+          returned_to_plant?: number
+          stock_date: string
+          sv_additional_issues?: number
+          sv_new_issues?: number
+          sv_reconnection_issues?: number
+          updated_at?: string
+        }
+        Update: {
+          closing_defective_empty?: number
+          closing_defective_filled?: number
+          closing_good_empty?: number
+          closing_good_filled?: number
+          created_at?: string
+          defective_item_returned_to_plant?: number
+          filled_by?: string | null
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          newly_identified_defective?: number
+          opening_defective_empty?: number
+          opening_defective_filled?: number
+          opening_good_empty?: number
+          opening_good_filled?: number
+          package_code_id?: string
+          received_from_consumer_against_tv?: number
+          received_from_consumer_refill?: number
+          received_from_plant?: number
+          refill_sale?: number
+          returned_to_plant?: number
+          stock_date?: string
+          sv_additional_issues?: number
+          sv_new_issues?: number
+          sv_reconnection_issues?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_entries_filled_by_fkey"
+            columns: ["filled_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stock_entries_package_code_id_fkey"
+            columns: ["package_code_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
