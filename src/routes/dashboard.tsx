@@ -5,11 +5,12 @@ import { getSessionState, logoutAgency } from "@/lib/agency.functions";
 
 type Role = "distributor" | "godown" | "computer_staff";
 
-const registers: { name: string; hint: string; roles: Role[] }[] = [
+const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = [
   {
     name: "Daily Stock Register",
     hint: "Opening, receipts, sales & closing cylinder stock",
-    roles: ["distributor", "godown", "computer_staff"],
+    roles: ["distributor", "godown"],
+    to: "/registers/stock",
   },
   {
     name: "SQC Register",
@@ -135,6 +136,9 @@ function DashboardPage() {
             <button
               key={register.name}
               type="button"
+              onClick={() => {
+                if (register.to) void navigate({ to: register.to });
+              }}
               className="min-h-24 rounded-xl border border-border bg-card p-4 text-left shadow-sm transition-colors hover:border-primary hover:bg-secondary"
             >
               <span className="block text-base font-semibold text-foreground">
@@ -145,7 +149,7 @@ function DashboardPage() {
           ))}
         </div>
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Register entry screens are coming next.
+          More register entry screens are coming next.
         </p>
       </div>
     </main>
