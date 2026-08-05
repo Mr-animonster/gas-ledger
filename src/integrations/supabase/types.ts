@@ -14,7 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      distributor_otps: {
+        Row: {
+          code: string
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          phone_number: string
+        }
+        Insert: {
+          code: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          phone_number: string
+        }
+        Update: {
+          code?: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          phone_number?: string
+        }
+        Relationships: []
+      }
+      distributor_settings: {
+        Row: {
+          agency_id: string
+          agency_name: string
+          created_at: string
+          id: string
+          password: string
+          phone_number: string
+          singleton: boolean
+        }
+        Insert: {
+          agency_id: string
+          agency_name?: string
+          created_at?: string
+          id?: string
+          password: string
+          phone_number: string
+          singleton?: boolean
+        }
+        Update: {
+          agency_id?: string
+          agency_name?: string
+          created_at?: string
+          id?: string
+          password?: string
+          phone_number?: string
+          singleton?: boolean
+        }
+        Relationships: []
+      }
+      staff: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          role: Database["public"]["Enums"]["staff_role"]
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          role: Database["public"]["Enums"]["staff_role"]
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          role?: Database["public"]["Enums"]["staff_role"]
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +103,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      staff_role: "godown" | "computer_staff" | "distributor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +230,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      staff_role: ["godown", "computer_staff", "distributor"],
+    },
   },
 } as const
