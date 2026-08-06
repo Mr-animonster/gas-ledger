@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as RoleRouteImport } from './routes/role'
+import { Route as RegistersInstallationRouteImport } from './routes/registers/installation'
 import { Route as RegistersSalesRouteImport } from './routes/registers/sales'
 import { Route as RegistersSqcRouteImport } from './routes/registers/sqc'
 import { Route as RegistersStockRouteImport } from './routes/registers/stock'
@@ -29,6 +30,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const RoleRoute = RoleRouteImport.update({
   id: '/role',
   path: '/role',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistersInstallationRoute = RegistersInstallationRouteImport.update({
+  id: '/registers/installation',
+  path: '/registers/installation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegistersSalesRoute = RegistersSalesRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/role'
+    | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
     | '/registers/stock'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/role'
+    | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
     | '/registers/stock'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/role'
+    | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
     | '/registers/stock'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   RoleRoute: typeof RoleRoute
+  RegistersInstallationRoute: typeof RegistersInstallationRoute
   RegistersSalesRoute: typeof RegistersSalesRoute
   RegistersSqcRoute: typeof RegistersSqcRoute
   RegistersStockRoute: typeof RegistersStockRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/role'
       fullPath: '/role'
       preLoaderRoute: typeof RoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registers/installation': {
+      id: '/registers/installation'
+      path: '/registers/installation'
+      fullPath: '/registers/installation'
+      preLoaderRoute: typeof RegistersInstallationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/registers/sales': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   RoleRoute: RoleRoute,
+  RegistersInstallationRoute: RegistersInstallationRoute,
   RegistersSalesRoute: RegistersSalesRoute,
   RegistersSqcRoute: RegistersSqcRoute,
   RegistersStockRoute: RegistersStockRoute,
