@@ -122,6 +122,99 @@ export type Database = {
         }
         Relationships: []
       }
+      installation_arb_entries: {
+        Row: {
+          apron: boolean
+          consumer_id: string | null
+          consumer_name: string | null
+          consumer_no: string | null
+          created_at: string
+          customer_sign: string | null
+          distributor_sign: string | null
+          entry_date: string
+          filled_by: string | null
+          id: string
+          installation_date: string | null
+          lighter: boolean
+          locked: boolean
+          locked_at: string | null
+          mobile_no: string | null
+          other_arb: string | null
+          sr_no: number
+          sv_date: string | null
+          total_bill_amount: number
+          total_receipt_amount: number
+          trolley: boolean
+          type_of_stove_sold: string | null
+          updated_at: string
+        }
+        Insert: {
+          apron?: boolean
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          customer_sign?: string | null
+          distributor_sign?: string | null
+          entry_date?: string
+          filled_by?: string | null
+          id?: string
+          installation_date?: string | null
+          lighter?: boolean
+          locked?: boolean
+          locked_at?: string | null
+          mobile_no?: string | null
+          other_arb?: string | null
+          sr_no?: number
+          sv_date?: string | null
+          total_bill_amount?: number
+          total_receipt_amount?: number
+          trolley?: boolean
+          type_of_stove_sold?: string | null
+          updated_at?: string
+        }
+        Update: {
+          apron?: boolean
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          customer_sign?: string | null
+          distributor_sign?: string | null
+          entry_date?: string
+          filled_by?: string | null
+          id?: string
+          installation_date?: string | null
+          lighter?: boolean
+          locked?: boolean
+          locked_at?: string | null
+          mobile_no?: string | null
+          other_arb?: string | null
+          sr_no?: number
+          sv_date?: string | null
+          total_bill_amount?: number
+          total_receipt_amount?: number
+          trolley?: boolean
+          type_of_stove_sold?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "installation_arb_entries_consumer_id_fkey"
+            columns: ["consumer_id"]
+            isOneToOne: false
+            referencedRelation: "consumers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "installation_arb_entries_filled_by_fkey"
+            columns: ["filled_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       package_codes: {
         Row: {
           active: boolean
