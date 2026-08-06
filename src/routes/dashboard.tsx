@@ -26,8 +26,9 @@ const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = 
   },
   {
     name: "Installation & ARB Register",
-    hint: "New installations and after-sale ARB visits",
+    hint: "New installations and allied retail (ARB) item sales",
     roles: ["distributor", "computer_staff"],
+    to: "/registers/installation",
   },
   {
     name: "Connection/SV Register",
