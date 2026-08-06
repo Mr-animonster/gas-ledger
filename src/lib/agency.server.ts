@@ -14,7 +14,7 @@ export function getAppSession() {
     password: process.env["SESSION_SECRET"]!,
     name: "lpg-register-session",
     maxAge: 60 * 60 * 12,
-    cookie: { httpOnly: true, secure: true, sameSite: "lax", path: "/" },
+    cookie: { httpOnly: true, secure: true, sameSite: "none", path: "/" },
   });
 }
 
