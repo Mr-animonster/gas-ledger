@@ -87,7 +87,7 @@ const emptyForm = (): FormState => ({
 const inputClass =
   "h-12 w-full rounded-lg border border-input bg-background px-3 text-base text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Field({ label, hint, children }: { label: string; hint?: string | undefined; children: React.ReactNode }) {
   return (
     <label className="block space-y-1.5">
       <span className="text-sm font-medium text-foreground">{label}</span>
