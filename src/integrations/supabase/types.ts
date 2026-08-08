@@ -35,6 +35,100 @@ export type Database = {
         }
         Relationships: []
       }
+      connection_sv_entries: {
+        Row: {
+          aadhaar_last4: string | null
+          bank_ac_last4: string | null
+          cash_memo_no: number | null
+          consumer_id: string | null
+          consumer_name: string | null
+          consumer_no: string | null
+          created_at: string
+          cylinder_dpr_count: number
+          cylinder_dpr_type_id: string | null
+          duplicate_household_check_done: boolean
+          eligibility_check_done: boolean
+          entry_date: string
+          filled_empty_at_tv_retrieval: Database["public"]["Enums"]["tv_retrieval_state"]
+          id: string
+          locked: boolean
+          locked_at: string | null
+          processed_by: string | null
+          scheme: Database["public"]["Enums"]["consumer_scheme"]
+          sr_no: number
+          type: Database["public"]["Enums"]["connection_sv_type"]
+          updated_at: string
+        }
+        Insert: {
+          aadhaar_last4?: string | null
+          bank_ac_last4?: string | null
+          cash_memo_no?: number | null
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          cylinder_dpr_count?: number
+          cylinder_dpr_type_id?: string | null
+          duplicate_household_check_done?: boolean
+          eligibility_check_done?: boolean
+          entry_date?: string
+          filled_empty_at_tv_retrieval?: Database["public"]["Enums"]["tv_retrieval_state"]
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          processed_by?: string | null
+          scheme?: Database["public"]["Enums"]["consumer_scheme"]
+          sr_no?: number
+          type?: Database["public"]["Enums"]["connection_sv_type"]
+          updated_at?: string
+        }
+        Update: {
+          aadhaar_last4?: string | null
+          bank_ac_last4?: string | null
+          cash_memo_no?: number | null
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          cylinder_dpr_count?: number
+          cylinder_dpr_type_id?: string | null
+          duplicate_household_check_done?: boolean
+          eligibility_check_done?: boolean
+          entry_date?: string
+          filled_empty_at_tv_retrieval?: Database["public"]["Enums"]["tv_retrieval_state"]
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          processed_by?: string | null
+          scheme?: Database["public"]["Enums"]["consumer_scheme"]
+          sr_no?: number
+          type?: Database["public"]["Enums"]["connection_sv_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connection_sv_entries_consumer_id_fkey"
+            columns: ["consumer_id"]
+            isOneToOne: false
+            referencedRelation: "consumers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "connection_sv_entries_cylinder_dpr_type_id_fkey"
+            columns: ["cylinder_dpr_type_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "connection_sv_entries_processed_by_fkey"
+            columns: ["processed_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consumers: {
         Row: {
           address: string | null
@@ -621,12 +715,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      connection_sv_type: "New" | "Reconnection" | "Additional" | "TV"
       consumer_scheme: "Regular" | "PMUY" | "Extended PMUY" | "PMUY-2"
       leaky_location: "None" | "Body" | "Bung"
       payment_mode: "Cash" | "UPI" | "Card"
       sale_item: "Refill" | "ARB-Other"
       sealing_condition: "OK" | "Damaged"
       staff_role: "godown" | "computer_staff" | "distributor"
+      tv_retrieval_state: "Filled" | "Empty" | "N/A"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -754,12 +850,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      connection_sv_type: ["New", "Reconnection", "Additional", "TV"],
       consumer_scheme: ["Regular", "PMUY", "Extended PMUY", "PMUY-2"],
       leaky_location: ["None", "Body", "Bung"],
       payment_mode: ["Cash", "UPI", "Card"],
       sale_item: ["Refill", "ARB-Other"],
       sealing_condition: ["OK", "Damaged"],
       staff_role: ["godown", "computer_staff", "distributor"],
+      tv_retrieval_state: ["Filled", "Empty", "N/A"],
     },
   },
 } as const
