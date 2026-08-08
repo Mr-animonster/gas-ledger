@@ -32,8 +32,9 @@ const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = 
   },
   {
     name: "Connection/SV Register",
-    hint: "New connections, transfers and subscription vouchers",
+    hint: "New connections, reconnections, DBC and TV terminations",
     roles: ["distributor", "computer_staff"],
+    to: "/registers/connection",
   },
   {
     name: "Defective Cylinder/DPR Register",
