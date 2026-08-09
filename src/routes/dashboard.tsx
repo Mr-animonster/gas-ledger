@@ -40,6 +40,7 @@ const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = 
     name: "Defective Cylinder/DPR Register",
     hint: "Defective cylinders and DPR reporting",
     roles: ["distributor", "godown"],
+    to: "/registers/defective",
   },
   {
     name: "Complaint Register",

@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as RoleRouteImport } from './routes/role'
 import { Route as RegistersConnectionRouteImport } from './routes/registers/connection'
+import { Route as RegistersDefectiveRouteImport } from './routes/registers/defective'
 import { Route as RegistersInstallationRouteImport } from './routes/registers/installation'
 import { Route as RegistersSalesRouteImport } from './routes/registers/sales'
 import { Route as RegistersSqcRouteImport } from './routes/registers/sqc'
@@ -36,6 +37,11 @@ const RoleRoute = RoleRouteImport.update({
 const RegistersConnectionRoute = RegistersConnectionRouteImport.update({
   id: '/registers/connection',
   path: '/registers/connection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistersDefectiveRoute = RegistersDefectiveRouteImport.update({
+  id: '/registers/defective',
+  path: '/registers/defective',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegistersInstallationRoute = RegistersInstallationRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
   '/registers/connection': typeof RegistersConnectionRoute
+  '/registers/defective': typeof RegistersDefectiveRoute
   '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
   '/registers/connection': typeof RegistersConnectionRoute
+  '/registers/defective': typeof RegistersDefectiveRoute
   '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
   '/registers/connection': typeof RegistersConnectionRoute
+  '/registers/defective': typeof RegistersDefectiveRoute
   '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/role'
     | '/registers/connection'
+    | '/registers/defective'
     | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/role'
     | '/registers/connection'
+    | '/registers/defective'
     | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/role'
     | '/registers/connection'
+    | '/registers/defective'
     | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   RoleRoute: typeof RoleRoute
   RegistersConnectionRoute: typeof RegistersConnectionRoute
+  RegistersDefectiveRoute: typeof RegistersDefectiveRoute
   RegistersInstallationRoute: typeof RegistersInstallationRoute
   RegistersSalesRoute: typeof RegistersSalesRoute
   RegistersSqcRoute: typeof RegistersSqcRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/registers/connection'
       fullPath: '/registers/connection'
       preLoaderRoute: typeof RegistersConnectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registers/defective': {
+      id: '/registers/defective'
+      path: '/registers/defective'
+      fullPath: '/registers/defective'
+      preLoaderRoute: typeof RegistersDefectiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/registers/installation': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   RoleRoute: RoleRoute,
   RegistersConnectionRoute: RegistersConnectionRoute,
+  RegistersDefectiveRoute: RegistersDefectiveRoute,
   RegistersInstallationRoute: RegistersInstallationRoute,
   RegistersSalesRoute: RegistersSalesRoute,
   RegistersSqcRoute: RegistersSqcRoute,
@@ -208,13 +229,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
