@@ -159,6 +159,118 @@ export type Database = {
         }
         Relationships: []
       }
+      defective_entries: {
+        Row: {
+          batch_no: string | null
+          consumer_contact: string | null
+          consumer_id: string | null
+          consumer_name: string | null
+          consumer_no: string | null
+          created_at: string
+          cylinder_dpr_sr_no: string | null
+          cylinder_dpr_type_id: string | null
+          date_of_identification: string
+          distributor_signature: string | null
+          driver_consumer_signature: string | null
+          filled_by: string | null
+          id: string
+          locked: boolean
+          locked_at: string | null
+          nature_of_defect: string | null
+          plant_name: string | null
+          prcn: string | null
+          prcn_received: boolean
+          prcn_sent_on: string | null
+          received_replacement_stock_on: string | null
+          seal_condition: Database["public"]["Enums"]["defect_seal_condition"]
+          sent_to_plant_on: string | null
+          source: Database["public"]["Enums"]["defect_source"]
+          sr_no: number
+          tt_no: string | null
+          updated_at: string
+        }
+        Insert: {
+          batch_no?: string | null
+          consumer_contact?: string | null
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          cylinder_dpr_sr_no?: string | null
+          cylinder_dpr_type_id?: string | null
+          date_of_identification?: string
+          distributor_signature?: string | null
+          driver_consumer_signature?: string | null
+          filled_by?: string | null
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          nature_of_defect?: string | null
+          plant_name?: string | null
+          prcn?: string | null
+          prcn_received?: boolean
+          prcn_sent_on?: string | null
+          received_replacement_stock_on?: string | null
+          seal_condition?: Database["public"]["Enums"]["defect_seal_condition"]
+          sent_to_plant_on?: string | null
+          source?: Database["public"]["Enums"]["defect_source"]
+          sr_no?: number
+          tt_no?: string | null
+          updated_at?: string
+        }
+        Update: {
+          batch_no?: string | null
+          consumer_contact?: string | null
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          cylinder_dpr_sr_no?: string | null
+          cylinder_dpr_type_id?: string | null
+          date_of_identification?: string
+          distributor_signature?: string | null
+          driver_consumer_signature?: string | null
+          filled_by?: string | null
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          nature_of_defect?: string | null
+          plant_name?: string | null
+          prcn?: string | null
+          prcn_received?: boolean
+          prcn_sent_on?: string | null
+          received_replacement_stock_on?: string | null
+          seal_condition?: Database["public"]["Enums"]["defect_seal_condition"]
+          sent_to_plant_on?: string | null
+          source?: Database["public"]["Enums"]["defect_source"]
+          sr_no?: number
+          tt_no?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "defective_entries_consumer_id_fkey"
+            columns: ["consumer_id"]
+            isOneToOne: false
+            referencedRelation: "consumers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "defective_entries_cylinder_dpr_type_id_fkey"
+            columns: ["cylinder_dpr_type_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "defective_entries_filled_by_fkey"
+            columns: ["filled_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       distributor_otps: {
         Row: {
           code: string
@@ -717,6 +829,8 @@ export type Database = {
     Enums: {
       connection_sv_type: "New" | "Reconnection" | "Additional" | "TV"
       consumer_scheme: "Regular" | "PMUY" | "Extended PMUY" | "PMUY-2"
+      defect_seal_condition: "OK" | "Damaged" | "N/A"
+      defect_source: "Truck" | "Consumer"
       leaky_location: "None" | "Body" | "Bung"
       payment_mode: "Cash" | "UPI" | "Card"
       sale_item: "Refill" | "ARB-Other"
@@ -852,6 +966,8 @@ export const Constants = {
     Enums: {
       connection_sv_type: ["New", "Reconnection", "Additional", "TV"],
       consumer_scheme: ["Regular", "PMUY", "Extended PMUY", "PMUY-2"],
+      defect_seal_condition: ["OK", "Damaged", "N/A"],
+      defect_source: ["Truck", "Consumer"],
       leaky_location: ["None", "Body", "Bung"],
       payment_mode: ["Cash", "UPI", "Card"],
       sale_item: ["Refill", "ARB-Other"],
