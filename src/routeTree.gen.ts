@@ -12,12 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as RoleRouteImport } from './routes/role'
+import { Route as RegistersComplaintRouteImport } from './routes/registers/complaint'
 import { Route as RegistersConnectionRouteImport } from './routes/registers/connection'
 import { Route as RegistersDefectiveRouteImport } from './routes/registers/defective'
+import { Route as RegistersInspectionRouteImport } from './routes/registers/inspection'
 import { Route as RegistersInstallationRouteImport } from './routes/registers/installation'
 import { Route as RegistersSalesRouteImport } from './routes/registers/sales'
 import { Route as RegistersSqcRouteImport } from './routes/registers/sqc'
 import { Route as RegistersStockRouteImport } from './routes/registers/stock'
+import { Route as RegistersWagesRouteImport } from './routes/registers/wages'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,6 +37,11 @@ const RoleRoute = RoleRouteImport.update({
   path: '/role',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegistersComplaintRoute = RegistersComplaintRouteImport.update({
+  id: '/registers/complaint',
+  path: '/registers/complaint',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegistersConnectionRoute = RegistersConnectionRouteImport.update({
   id: '/registers/connection',
   path: '/registers/connection',
@@ -42,6 +50,11 @@ const RegistersConnectionRoute = RegistersConnectionRouteImport.update({
 const RegistersDefectiveRoute = RegistersDefectiveRouteImport.update({
   id: '/registers/defective',
   path: '/registers/defective',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegistersInspectionRoute = RegistersInspectionRouteImport.update({
+  id: '/registers/inspection',
+  path: '/registers/inspection',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegistersInstallationRoute = RegistersInstallationRouteImport.update({
@@ -64,40 +77,54 @@ const RegistersStockRoute = RegistersStockRouteImport.update({
   path: '/registers/stock',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegistersWagesRoute = RegistersWagesRouteImport.update({
+  id: '/registers/wages',
+  path: '/registers/wages',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/complaint': typeof RegistersComplaintRoute
   '/registers/connection': typeof RegistersConnectionRoute
   '/registers/defective': typeof RegistersDefectiveRoute
+  '/registers/inspection': typeof RegistersInspectionRoute
   '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
+  '/registers/wages': typeof RegistersWagesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/complaint': typeof RegistersComplaintRoute
   '/registers/connection': typeof RegistersConnectionRoute
   '/registers/defective': typeof RegistersDefectiveRoute
+  '/registers/inspection': typeof RegistersInspectionRoute
   '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
+  '/registers/wages': typeof RegistersWagesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/role': typeof RoleRoute
+  '/registers/complaint': typeof RegistersComplaintRoute
   '/registers/connection': typeof RegistersConnectionRoute
   '/registers/defective': typeof RegistersDefectiveRoute
+  '/registers/inspection': typeof RegistersInspectionRoute
   '/registers/installation': typeof RegistersInstallationRoute
   '/registers/sales': typeof RegistersSalesRoute
   '/registers/sqc': typeof RegistersSqcRoute
   '/registers/stock': typeof RegistersStockRoute
+  '/registers/wages': typeof RegistersWagesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -105,46 +132,58 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/role'
+    | '/registers/complaint'
     | '/registers/connection'
     | '/registers/defective'
+    | '/registers/inspection'
     | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
     | '/registers/stock'
+    | '/registers/wages'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
     | '/role'
+    | '/registers/complaint'
     | '/registers/connection'
     | '/registers/defective'
+    | '/registers/inspection'
     | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
     | '/registers/stock'
+    | '/registers/wages'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/role'
+    | '/registers/complaint'
     | '/registers/connection'
     | '/registers/defective'
+    | '/registers/inspection'
     | '/registers/installation'
     | '/registers/sales'
     | '/registers/sqc'
     | '/registers/stock'
+    | '/registers/wages'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   RoleRoute: typeof RoleRoute
+  RegistersComplaintRoute: typeof RegistersComplaintRoute
   RegistersConnectionRoute: typeof RegistersConnectionRoute
   RegistersDefectiveRoute: typeof RegistersDefectiveRoute
+  RegistersInspectionRoute: typeof RegistersInspectionRoute
   RegistersInstallationRoute: typeof RegistersInstallationRoute
   RegistersSalesRoute: typeof RegistersSalesRoute
   RegistersSqcRoute: typeof RegistersSqcRoute
   RegistersStockRoute: typeof RegistersStockRoute
+  RegistersWagesRoute: typeof RegistersWagesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -170,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/registers/complaint': {
+      id: '/registers/complaint'
+      path: '/registers/complaint'
+      fullPath: '/registers/complaint'
+      preLoaderRoute: typeof RegistersComplaintRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/registers/connection': {
       id: '/registers/connection'
       path: '/registers/connection'
@@ -182,6 +228,13 @@ declare module '@tanstack/react-router' {
       path: '/registers/defective'
       fullPath: '/registers/defective'
       preLoaderRoute: typeof RegistersDefectiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/registers/inspection': {
+      id: '/registers/inspection'
+      path: '/registers/inspection'
+      fullPath: '/registers/inspection'
+      preLoaderRoute: typeof RegistersInspectionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/registers/installation': {
@@ -212,6 +265,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegistersStockRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/registers/wages': {
+      id: '/registers/wages'
+      path: '/registers/wages'
+      fullPath: '/registers/wages'
+      preLoaderRoute: typeof RegistersWagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -219,13 +279,26 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   RoleRoute: RoleRoute,
+  RegistersComplaintRoute: RegistersComplaintRoute,
   RegistersConnectionRoute: RegistersConnectionRoute,
   RegistersDefectiveRoute: RegistersDefectiveRoute,
+  RegistersInspectionRoute: RegistersInspectionRoute,
   RegistersInstallationRoute: RegistersInstallationRoute,
   RegistersSalesRoute: RegistersSalesRoute,
   RegistersSqcRoute: RegistersSqcRoute,
   RegistersStockRoute: RegistersStockRoute,
+  RegistersWagesRoute: RegistersWagesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

@@ -45,18 +45,22 @@ const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = 
   {
     name: "Complaint Register",
     hint: "Customer complaints and resolution status",
-    roles: ["distributor", "godown", "computer_staff"],
+    roles: ["distributor", "computer_staff"],
+    to: "/registers/complaint",
   },
   {
     name: "Staff Wage Register",
-    hint: "Wages, attendance and payments",
+    hint: "Monthly wages, PF/ESI and payments",
     roles: ["distributor"],
+    to: "/registers/wages",
   },
   {
-    name: "Inspection Log",
+    name: "Inspection Report Log",
     hint: "Oil company and statutory inspection visits",
     roles: ["distributor"],
+    to: "/registers/inspection",
   },
+
 ];
 
 const roleLabels: Record<Role, string> = {
