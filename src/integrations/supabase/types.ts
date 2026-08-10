@@ -35,6 +35,78 @@ export type Database = {
         }
         Relationships: []
       }
+      complaint_entries: {
+        Row: {
+          action_taken: string | null
+          complaint_text: string
+          consumer_contact: string | null
+          consumer_id: string | null
+          consumer_name: string | null
+          consumer_no: string | null
+          created_at: string
+          entry_date: string
+          id: string
+          locked: boolean
+          locked_at: string | null
+          nature: Database["public"]["Enums"]["complaint_nature"]
+          resolved_by: string | null
+          resolved_date: string | null
+          sr_no: number
+          updated_at: string
+        }
+        Insert: {
+          action_taken?: string | null
+          complaint_text?: string
+          consumer_contact?: string | null
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          entry_date?: string
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          nature?: Database["public"]["Enums"]["complaint_nature"]
+          resolved_by?: string | null
+          resolved_date?: string | null
+          sr_no?: number
+          updated_at?: string
+        }
+        Update: {
+          action_taken?: string | null
+          complaint_text?: string
+          consumer_contact?: string | null
+          consumer_id?: string | null
+          consumer_name?: string | null
+          consumer_no?: string | null
+          created_at?: string
+          entry_date?: string
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          nature?: Database["public"]["Enums"]["complaint_nature"]
+          resolved_by?: string | null
+          resolved_date?: string | null
+          sr_no?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "complaint_entries_consumer_id_fkey"
+            columns: ["consumer_id"]
+            isOneToOne: false
+            referencedRelation: "consumers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaint_entries_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       connection_sv_entries: {
         Row: {
           aadhaar_last4: string | null
@@ -325,6 +397,60 @@ export type Database = {
           password?: string
           phone_number?: string
           singleton?: boolean
+        }
+        Relationships: []
+      }
+      inspection_entries: {
+        Row: {
+          created_at: string
+          fine_amount: number
+          id: string
+          inspection_date: string
+          irregularity_category: Database["public"]["Enums"]["irregularity_category"]
+          locked: boolean
+          locked_at: string | null
+          officer_name_designation: string | null
+          reply_date: string | null
+          report_file_ref: string | null
+          report_filed: boolean
+          scn_date: string | null
+          speaking_order_date: string | null
+          type: Database["public"]["Enums"]["inspection_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          fine_amount?: number
+          id?: string
+          inspection_date?: string
+          irregularity_category?: Database["public"]["Enums"]["irregularity_category"]
+          locked?: boolean
+          locked_at?: string | null
+          officer_name_designation?: string | null
+          reply_date?: string | null
+          report_file_ref?: string | null
+          report_filed?: boolean
+          scn_date?: string | null
+          speaking_order_date?: string | null
+          type?: Database["public"]["Enums"]["inspection_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          fine_amount?: number
+          id?: string
+          inspection_date?: string
+          irregularity_category?: Database["public"]["Enums"]["irregularity_category"]
+          locked?: boolean
+          locked_at?: string | null
+          officer_name_designation?: string | null
+          reply_date?: string | null
+          report_file_ref?: string | null
+          report_filed?: boolean
+          scn_date?: string | null
+          speaking_order_date?: string | null
+          type?: Database["public"]["Enums"]["inspection_type"]
+          updated_at?: string
         }
         Relationships: []
       }
@@ -819,18 +945,159 @@ export type Database = {
           },
         ]
       }
+      wage_entries: {
+        Row: {
+          created_at: string
+          days_worked: number
+          esi_applicable: number
+          gross_wage: number
+          id: string
+          locked: boolean
+          locked_at: string | null
+          month_year: string
+          net_paid: number
+          net_paid_override: boolean
+          payment_date: string | null
+          payment_mode: string | null
+          pf_applicable: number
+          proprietor_signature: string | null
+          remarks: string | null
+          role: Database["public"]["Enums"]["staff_role"] | null
+          staff_id: string | null
+          staff_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          days_worked?: number
+          esi_applicable?: number
+          gross_wage?: number
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          month_year: string
+          net_paid?: number
+          net_paid_override?: boolean
+          payment_date?: string | null
+          payment_mode?: string | null
+          pf_applicable?: number
+          proprietor_signature?: string | null
+          remarks?: string | null
+          role?: Database["public"]["Enums"]["staff_role"] | null
+          staff_id?: string | null
+          staff_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          days_worked?: number
+          esi_applicable?: number
+          gross_wage?: number
+          id?: string
+          locked?: boolean
+          locked_at?: string | null
+          month_year?: string
+          net_paid?: number
+          net_paid_override?: boolean
+          payment_date?: string | null
+          payment_mode?: string | null
+          pf_applicable?: number
+          proprietor_signature?: string | null
+          remarks?: string | null
+          role?: Database["public"]["Enums"]["staff_role"] | null
+          staff_id?: string | null
+          staff_name?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wage_entries_staff_id_fkey"
+            columns: ["staff_id"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      assert_distributor: { Args: { p_role: string }; Returns: undefined }
+      inspection_entries_list: {
+        Args: { p_role: string }
+        Returns: {
+          created_at: string
+          fine_amount: number
+          id: string
+          inspection_date: string
+          irregularity_category: Database["public"]["Enums"]["irregularity_category"]
+          locked: boolean
+          locked_at: string | null
+          officer_name_designation: string | null
+          reply_date: string | null
+          report_file_ref: string | null
+          report_filed: boolean
+          scn_date: string | null
+          speaking_order_date: string | null
+          type: Database["public"]["Enums"]["inspection_type"]
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "inspection_entries"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      inspection_entries_save: {
+        Args: { p_id: string; p_payload: Json; p_role: string }
+        Returns: string
+      }
+      wage_entries_list: {
+        Args: { p_month?: string; p_role: string }
+        Returns: {
+          created_at: string
+          days_worked: number
+          esi_applicable: number
+          gross_wage: number
+          id: string
+          locked: boolean
+          locked_at: string | null
+          month_year: string
+          net_paid: number
+          net_paid_override: boolean
+          payment_date: string | null
+          payment_mode: string | null
+          pf_applicable: number
+          proprietor_signature: string | null
+          remarks: string | null
+          role: Database["public"]["Enums"]["staff_role"] | null
+          staff_id: string | null
+          staff_name: string | null
+          updated_at: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "wage_entries"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      wage_entries_save: {
+        Args: { p_id: string; p_payload: Json; p_role: string }
+        Returns: string
+      }
     }
     Enums: {
+      complaint_nature: "Delay" | "Leakage" | "Behaviour" | "Other"
       connection_sv_type: "New" | "Reconnection" | "Additional" | "TV"
       consumer_scheme: "Regular" | "PMUY" | "Extended PMUY" | "PMUY-2"
       defect_seal_condition: "OK" | "Damaged" | "N/A"
       defect_source: "Truck" | "Consumer"
+      inspection_type: "Routine" | "Surprise" | "Investigation"
+      irregularity_category: "Critical" | "Major" | "Minor" | "None"
       leaky_location: "None" | "Body" | "Bung"
       payment_mode: "Cash" | "UPI" | "Card"
       sale_item: "Refill" | "ARB-Other"
@@ -964,10 +1231,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      complaint_nature: ["Delay", "Leakage", "Behaviour", "Other"],
       connection_sv_type: ["New", "Reconnection", "Additional", "TV"],
       consumer_scheme: ["Regular", "PMUY", "Extended PMUY", "PMUY-2"],
       defect_seal_condition: ["OK", "Damaged", "N/A"],
       defect_source: ["Truck", "Consumer"],
+      inspection_type: ["Routine", "Surprise", "Investigation"],
+      irregularity_category: ["Critical", "Major", "Minor", "None"],
       leaky_location: ["None", "Body", "Bung"],
       payment_mode: ["Cash", "UPI", "Card"],
       sale_item: ["Refill", "ARB-Other"],
