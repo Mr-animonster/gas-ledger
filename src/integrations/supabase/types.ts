@@ -624,6 +624,7 @@ export type Database = {
           id: string
           issued_by: string | null
           item: Database["public"]["Enums"]["sale_item"]
+          package_code_id: string | null
           payment_mode: Database["public"]["Enums"]["payment_mode"]
           pdc_done: boolean
           quantity: number
@@ -642,6 +643,7 @@ export type Database = {
           id?: string
           issued_by?: string | null
           item?: Database["public"]["Enums"]["sale_item"]
+          package_code_id?: string | null
           payment_mode?: Database["public"]["Enums"]["payment_mode"]
           pdc_done?: boolean
           quantity?: number
@@ -660,6 +662,7 @@ export type Database = {
           id?: string
           issued_by?: string | null
           item?: Database["public"]["Enums"]["sale_item"]
+          package_code_id?: string | null
           payment_mode?: Database["public"]["Enums"]["payment_mode"]
           pdc_done?: boolean
           quantity?: number
@@ -687,6 +690,13 @@ export type Database = {
             columns: ["issued_by"]
             isOneToOne: false
             referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_entries_package_code_id_fkey"
+            columns: ["package_code_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
             referencedColumns: ["id"]
           },
         ]
@@ -1021,7 +1031,68 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      v_daily_defective_movement: {
+        Row: {
+          defective_item_returned_to_plant: number | null
+          entry_date: string | null
+          newly_identified_defective: number | null
+          package_code_id: string | null
+          replacement_received: number | null
+        }
+        Relationships: []
+      }
+      v_daily_refill_sale: {
+        Row: {
+          entry_date: string | null
+          package_code_id: string | null
+          refill_sale: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_entries_package_code_id_fkey"
+            columns: ["package_code_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_daily_sv_issues: {
+        Row: {
+          entry_date: string | null
+          package_code_id: string | null
+          sv_additional_issues: number | null
+          sv_new_issues: number | null
+          sv_reconnection_issues: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connection_sv_entries_cylinder_dpr_type_id_fkey"
+            columns: ["package_code_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      v_daily_tv_retrieval: {
+        Row: {
+          entry_date: string | null
+          package_code_id: string | null
+          tv_empty: number | null
+          tv_filled: number | null
+          tv_total: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "connection_sv_entries_cylinder_dpr_type_id_fkey"
+            columns: ["package_code_id"]
+            isOneToOne: false
+            referencedRelation: "package_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       assert_distributor: { Args: { p_role: string }; Returns: undefined }
