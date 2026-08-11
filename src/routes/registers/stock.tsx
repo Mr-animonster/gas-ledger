@@ -159,7 +159,9 @@ function StockRegisterPage() {
     return data.rows.map((row) => {
       const edits = draft[row.package_code_id] ?? {};
       const merged: StockInputs = { ...row, ...edits } as StockInputs;
-      return { ...row, ...merged, ...computeClosing(merged) };
+      const tv = { tv_filled: row.tv_filled, tv_empty: row.tv_empty };
+      return { ...row, ...merged, ...computeClosing(merged, tv) };
+
     });
   }, [data, draft]);
 
