@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 import { FilledBySelect } from "@/components/FilledBySelect";
 import { getSessionState } from "@/lib/agency.functions";
-import { searchConsumers } from "@/lib/reference.functions";
+import { getPackageCodes, searchConsumers } from "@/lib/reference.functions";
 import { getSalesDayData, lockSalesDayFn, saveSalesBatchFn } from "@/lib/sales.functions";
 import { batchTotal, computedAmount, isOverridden, type SaleItem } from "@/lib/sales-math";
 
@@ -24,6 +24,7 @@ type RowDraft = {
   consumer_id: string | null;
   consumer_no: string;
   consumer_name: string;
+  package_code_id: string;
   item: SaleItem;
   quantity: number;
   rate: number;
@@ -41,13 +42,14 @@ function todayISO() {
   return new Date(now.getTime() - offset * 60_000).toISOString().slice(0, 10);
 }
 
-function makeRow(rate: number): RowDraft {
+function makeRow(rate: number, packageCodeId = ""): RowDraft {
   return {
     id: null,
     cash_memo_no: null,
     consumer_id: null,
     consumer_no: "",
     consumer_name: "",
+    package_code_id: packageCodeId,
     item: "Refill",
     quantity: 1,
     rate,
@@ -251,6 +253,7 @@ function SalesRegisterPage() {
         consumer_id: e.consumer_id,
         consumer_no: e.consumer_no ?? "",
         consumer_name: e.consumer_name ?? "",
+        package_code_id: e.package_code_id ?? "",
         item: e.item,
         quantity: e.quantity,
         rate: e.rate,
@@ -289,6 +292,7 @@ function SalesRegisterPage() {
             consumer_id: r.consumer_id,
             consumer_no: r.consumer_no || null,
             consumer_name: r.consumer_name || null,
+            package_code_id: r.package_code_id || null,
             item: r.item,
             quantity: Math.max(0, Math.round(r.quantity) || 0),
             rate: Number(r.rate) || 0,
@@ -314,7 +318,8 @@ function SalesRegisterPage() {
             consumer_id: e.consumer_id,
             consumer_no: e.consumer_no ?? "",
             consumer_name: e.consumer_name ?? "",
-            item: e.item,
+            package_code_id: e.package_code_id ?? "",
+        item: e.item,
             quantity: e.quantity,
             rate: e.rate,
             amount_charged: e.amount_charged,
@@ -448,6 +453,7 @@ function SalesRegisterPage() {
                 <th className="w-56 px-2 py-2 font-semibold">Consumer</th>
                 <th className="w-48 px-2 py-2 font-semibold">Name</th>
                 <th className="w-32 px-2 py-2 font-semibold">Item</th>
+                <th className="w-32 px-2 py-2 font-semibold">Package</th>
                 <th className="w-20 px-2 py-2 font-semibold">Qty</th>
                 <th className="w-28 px-2 py-2 font-semibold">Rate</th>
                 <th className="w-32 px-2 py-2 font-semibold">Amount</th>

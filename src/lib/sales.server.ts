@@ -71,6 +71,7 @@ export async function getSalesDay(date: string) {
           consumer_id: (e['consumer_id'] as string | null) ?? null,
           consumer_no: (e['consumer_no'] as string | null) ?? null,
           consumer_name: (e['consumer_name'] as string | null) ?? null,
+          package_code_id: (e['package_code_id'] as string | null) ?? null,
           item: e['item'] as SaleItem,
           quantity: Number(e['quantity']),
           rate: Number(e['rate']),
@@ -104,6 +105,7 @@ export type SalesRowInput = {
   consumer_id: string | null;
   consumer_no: string | null;
   consumer_name: string | null;
+  package_code_id: string | null;
   item: SaleItem;
   quantity: number;
   rate: number;
@@ -167,6 +169,7 @@ export async function saveSalesBatch(input: {
     consumer_id: row.consumer_id,
     consumer_no: row.consumer_no,
     consumer_name: row.consumer_name,
+    package_code_id: row.package_code_id,
     item: row.item,
     quantity: Math.max(0, Math.round(row.quantity) || 0),
     rate: Number(row.rate) || 0,
