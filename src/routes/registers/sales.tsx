@@ -184,7 +184,19 @@ function SalesRegisterPage() {
     queryFn: () => fetchDay({ data: { date } }),
   });
 
+  const fetchPackages = useServerFn(getPackageCodes);
+  const packagesQuery = useQuery({
+    queryKey: ["package-codes"],
+    queryFn: () => fetchPackages({ data: undefined }),
+    staleTime: 5 * 60_000,
+  });
+  const packageCodes = packagesQuery.data ?? [];
+  // Default cylinder for a refill row: the agency's standard 14 Kg package.
+  const defaultPackageId =
+    packageCodes.find((p) => p.code === "14 Kg")?.id ?? packageCodes[0]?.id ?? "";
+
   const rates = day.data?.standardRates ?? { Refill: 0, "ARB-Other": 0 };
+
   const currentBatch = day.data?.batches.find((b) => b.id === batchId) ?? null;
   const locked = Boolean(currentBatch?.locked);
   const canEdit = !locked;
