@@ -15,6 +15,29 @@ export type StockInputs = {
   newly_identified_defective: number;
 };
 
+/** Fields the user still types in; everything else is auto-pulled from source registers. */
+export const MANUAL_FIELDS = [
+  "received_from_plant",
+  "received_from_consumer_refill",
+  "returned_to_plant",
+] as const;
+export type ManualField = (typeof MANUAL_FIELDS)[number];
+
+/** Fields fed live by the Supabase daily views. */
+export const AUTO_FIELDS = [
+  "refill_sale",
+  "sv_new_issues",
+  "sv_reconnection_issues",
+  "sv_additional_issues",
+  "received_from_consumer_against_tv",
+  "defective_item_returned_to_plant",
+  "newly_identified_defective",
+] as const;
+export type AutoField = (typeof AUTO_FIELDS)[number];
+
+/** TV retrievals split filled vs empty — not stored, only used for closing balances. */
+export type TvSplit = { tv_filled: number; tv_empty: number };
+
 export type StockClosing = {
   closing_good_filled: number;
   closing_good_empty: number;
@@ -23,26 +46,29 @@ export type StockClosing = {
 };
 
 /** Closing balances for the Daily Stock Register. */
-export function computeClosing(row: StockInputs): StockClosing {
+export function computeClosing(row: StockInputs, tv?: Partial<TvSplit>): StockClosing {
+  const tvFilled = tv?.tv_filled ?? 0;
+  const tvEmpty = tv?.tv_empty ?? Math.max(0, row.received_from_consumer_against_tv - tvFilled);
+
   return {
     closing_good_filled:
       row.opening_good_filled +
       row.received_from_plant -
       row.refill_sale -
       row.sv_new_issues -
-      row.sv_additional_issues,
+      row.sv_reconnection_issues -
+      row.sv_additional_issues +
+      tvFilled,
     closing_good_empty:
       row.opening_good_empty +
       row.received_from_consumer_refill +
-      row.received_from_consumer_against_tv -
+      tvEmpty -
       row.returned_to_plant -
       row.newly_identified_defective,
-    // Wired to the Defective Cylinder register later.
     closing_defective_filled: row.opening_defective_filled,
-    // Net zero for now until the Defective register feeds this.
     closing_defective_empty:
       row.opening_defective_empty +
-      row.defective_item_returned_to_plant -
+      row.newly_identified_defective -
       row.defective_item_returned_to_plant,
   };
 }
