@@ -529,6 +529,25 @@ function SalesRegisterPage() {
                       </select>
                     </td>
                     <td className="px-2 py-1.5">
+                      <select
+                        data-row={index}
+                        data-col="package"
+                        aria-label="Cylinder package"
+                        disabled={!canEdit}
+                        value={row.package_code_id}
+                        onChange={(e) => setRow(index, { package_code_id: e.target.value })}
+                        className={cellClass}
+                      >
+                        <option value="">—</option>
+                        {packageCodes.map((pkg) => (
+                          <option key={pkg.id} value={pkg.id}>
+                            {pkg.code}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+
+                    <td className="px-2 py-1.5">
                       <input
                         data-row={index}
                         data-col="quantity"
