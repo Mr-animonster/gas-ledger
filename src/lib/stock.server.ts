@@ -1,7 +1,14 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 import { getAppSession } from "./agency.server";
-import { computeClosing, EMPTY_INPUTS, type StockInputs } from "./stock-math";
+import {
+  AUTO_FIELDS,
+  computeClosing,
+  EMPTY_INPUTS,
+  MANUAL_FIELDS,
+  type StockInputs,
+  type TvSplit,
+} from "./stock-math";
 
 async function requireSession() {
   const session = await getAppSession();
@@ -14,27 +21,105 @@ async function requireSession() {
 
 const NUMERIC_FIELDS = Object.keys(EMPTY_INPUTS) as (keyof StockInputs)[];
 
-export type StockRow = StockInputs & {
-  id: string | null;
-  package_code_id: string;
-  package_code: string;
-  closing_good_filled: number;
-  closing_good_empty: number;
-  closing_defective_filled: number;
-  closing_defective_empty: number;
-  filled_by: string | null;
-  locked: boolean;
-  locked_at: string | null;
+export type StockRow = StockInputs &
+  TvSplit & {
+    id: string | null;
+    package_code_id: string;
+    package_code: string;
+    closing_good_filled: number;
+    closing_good_empty: number;
+    closing_defective_filled: number;
+    closing_defective_empty: number;
+    filled_by: string | null;
+    locked: boolean;
+    locked_at: string | null;
+  };
+
+type AutoValues = Pick<StockInputs, (typeof AUTO_FIELDS)[number]> & TvSplit;
+
+const EMPTY_AUTO: AutoValues = {
+  refill_sale: 0,
+  sv_new_issues: 0,
+  sv_reconnection_issues: 0,
+  sv_additional_issues: 0,
+  received_from_consumer_against_tv: 0,
+  defective_item_returned_to_plant: 0,
+  newly_identified_defective: 0,
+  tv_filled: 0,
+  tv_empty: 0,
 };
+
+/** Live figures pulled from the source registers via database views. */
+async function loadAutoValues(stockDate: string) {
+  const [refill, sv, tv, defective] = await Promise.all([
+    supabaseAdmin
+      .from("v_daily_refill_sale")
+      .select("package_code_id, refill_sale")
+      .eq("entry_date", stockDate),
+    supabaseAdmin
+      .from("v_daily_sv_issues")
+      .select("package_code_id, sv_new_issues, sv_reconnection_issues, sv_additional_issues")
+      .eq("entry_date", stockDate),
+    supabaseAdmin
+      .from("v_daily_tv_retrieval")
+      .select("package_code_id, tv_filled, tv_empty, tv_total")
+      .eq("entry_date", stockDate),
+    supabaseAdmin
+      .from("v_daily_defective_movement")
+      .select("package_code_id, newly_identified_defective, defective_item_returned_to_plant")
+      .eq("entry_date", stockDate),
+  ]);
+
+  if (refill.error || sv.error || tv.error || defective.error) {
+    throw new Error("Could not load the auto-pulled figures from the source registers.");
+  }
+
+  const map = new Map<string, AutoValues>();
+  const get = (id: string | null) => {
+    if (!id) return null;
+    if (!map.has(id)) map.set(id, { ...EMPTY_AUTO });
+    return map.get(id)!;
+  };
+
+  for (const row of refill.data ?? []) {
+    const target = get(row.package_code_id);
+    if (target) target.refill_sale = Number(row.refill_sale ?? 0);
+  }
+  for (const row of sv.data ?? []) {
+    const target = get(row.package_code_id);
+    if (!target) continue;
+    target.sv_new_issues = Number(row.sv_new_issues ?? 0);
+    target.sv_reconnection_issues = Number(row.sv_reconnection_issues ?? 0);
+    target.sv_additional_issues = Number(row.sv_additional_issues ?? 0);
+  }
+  for (const row of tv.data ?? []) {
+    const target = get(row.package_code_id);
+    if (!target) continue;
+    target.tv_filled = Number(row.tv_filled ?? 0);
+    target.tv_empty = Number(row.tv_empty ?? 0);
+    target.received_from_consumer_against_tv = Number(row.tv_total ?? 0);
+  }
+  for (const row of defective.data ?? []) {
+    const target = get(row.package_code_id);
+    if (!target) continue;
+    target.newly_identified_defective = Number(row.newly_identified_defective ?? 0);
+    target.defective_item_returned_to_plant = Number(row.defective_item_returned_to_plant ?? 0);
+  }
+
+  return map;
+}
 
 export async function loadStockDay(stockDate: string) {
   await requireSession();
 
-  const { data: packages, error: pkgError } = await supabaseAdmin
-    .from("package_codes")
-    .select("id, code, sort_order")
-    .eq("active", true)
-    .order("sort_order");
+  const [{ data: packages, error: pkgError }, autoValues] = await Promise.all([
+    supabaseAdmin
+      .from("package_codes")
+      .select("id, code, sort_order")
+      .eq("active", true)
+      .order("sort_order"),
+    loadAutoValues(stockDate),
+  ]);
   if (pkgError) throw new Error("Could not load package codes.");
 
   const { data: entries, error: entryError } = await supabaseAdmin
@@ -62,30 +147,32 @@ export async function loadStockDay(stockDate: string) {
 
   const rows: StockRow[] = (packages ?? []).map((pkg) => {
     const prev = latestPrev.get(pkg.id);
-    const opening = {
+    const existing = byPackage.get(pkg.id);
+    const auto = autoValues.get(pkg.id) ?? EMPTY_AUTO;
+
+    const base: StockInputs = {
+      ...EMPTY_INPUTS,
       opening_good_filled: prev?.closing_good_filled ?? 0,
       opening_good_empty: prev?.closing_good_empty ?? 0,
       opening_defective_filled: prev?.closing_defective_filled ?? 0,
       opening_defective_empty: prev?.closing_defective_empty ?? 0,
     };
-    const existing = byPackage.get(pkg.id);
-
-    const base: StockInputs = {
-      ...EMPTY_INPUTS,
-      ...opening,
-    };
 
     if (existing) {
-      for (const field of NUMERIC_FIELDS) {
-        if (field.startsWith("opening_")) continue;
-        base[field] = (existing as unknown as Record<string, number>)[field] ?? 0;
+      for (const field of MANUAL_FIELDS) {
+        base[field] = Number((existing as unknown as Record<string, number>)[field] ?? 0);
       }
     }
 
-    const closing = computeClosing(base);
+    // Auto fields always reflect the source registers, never the stored copy.
+    for (const field of AUTO_FIELDS) base[field] = auto[field];
+
+    const tv: TvSplit = { tv_filled: auto.tv_filled, tv_empty: auto.tv_empty };
+    const closing = computeClosing(base, tv);
 
     return {
       ...base,
+      ...tv,
       ...closing,
       id: existing?.id ?? null,
       package_code_id: pkg.id,
@@ -121,14 +208,15 @@ export async function saveStockDay(input: {
 
     const merged: StockInputs = { ...EMPTY_INPUTS };
     for (const field of NUMERIC_FIELDS) {
-      merged[field] = field.startsWith("opening_")
-        ? base[field]
-        : Math.max(0, Math.round(Number(row.values[field] ?? base[field]) || 0));
+      // Only the manual fields come from the client; everything else is authoritative server-side.
+      merged[field] = (MANUAL_FIELDS as readonly string[]).includes(field)
+        ? Math.max(0, Math.round(Number(row.values[field] ?? base[field]) || 0))
+        : base[field];
     }
 
     return {
       ...merged,
-      ...computeClosing(merged),
+      ...computeClosing(merged, { tv_filled: base.tv_filled, tv_empty: base.tv_empty }),
       stock_date: input.stockDate,
       package_code_id: row.package_code_id,
       filled_by: input.filledBy,
