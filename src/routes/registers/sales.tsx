@@ -211,9 +211,9 @@ function SalesRegisterPage() {
 
   useEffect(() => {
     if (rows.length === 0 && day.data && !batchId) {
-      setRows([makeRow(day.data.standardRates.Refill)]);
+      setRows([makeRow(day.data.standardRates.Refill, defaultPackageId)]);
     }
-  }, [day.data, batchId, rows.length]);
+  }, [day.data, batchId, rows.length, defaultPackageId]);
 
   const total = useMemo(() => batchTotal(rows), [rows]);
 
@@ -221,7 +221,7 @@ function SalesRegisterPage() {
     setRows((prev) => prev.map((r, i) => (i === index ? { ...r, ...patch } : r)));
 
   const addRow = () => {
-    setRows((prev) => [...prev, makeRow(rates.Refill)]);
+    setRows((prev) => [...prev, makeRow(rates.Refill, defaultPackageId)]);
     requestAnimationFrame(() => {
       const inputs = gridRef.current?.querySelectorAll<HTMLInputElement>('[data-col="consumer"]');
       inputs?.[inputs.length - 1]?.focus();
@@ -265,7 +265,7 @@ function SalesRegisterPage() {
         consumer_id: e.consumer_id,
         consumer_no: e.consumer_no ?? "",
         consumer_name: e.consumer_name ?? "",
-        package_code_id: e.package_code_id ?? "",
+        package_code_id: e.package_code_id ?? defaultPackageId,
         item: e.item,
         quantity: e.quantity,
         rate: e.rate,
@@ -280,7 +280,7 @@ function SalesRegisterPage() {
     setBatchId(null);
     setPhotoDataUrl(null);
     setPhotoName("");
-    setRows([makeRow(rates.Refill)]);
+    setRows([makeRow(rates.Refill, defaultPackageId)]);
   };
 
   const readPhoto = (file: File) => {
@@ -330,7 +330,7 @@ function SalesRegisterPage() {
             consumer_id: e.consumer_id,
             consumer_no: e.consumer_no ?? "",
             consumer_name: e.consumer_name ?? "",
-            package_code_id: e.package_code_id ?? "",
+            package_code_id: e.package_code_id ?? defaultPackageId,
         item: e.item,
             quantity: e.quantity,
             rate: e.rate,
