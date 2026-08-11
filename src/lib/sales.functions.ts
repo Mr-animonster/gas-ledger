@@ -9,6 +9,7 @@ const rowSchema = z.object({
   consumer_no: z.string().nullable().default(null),
   consumer_name: z.string().nullable().default(null),
   item: z.enum(["Refill", "ARB-Other"]).default("Refill"),
+  package_code_id: z.string().uuid().nullable().default(null),
   quantity: z.number().int().min(0).default(1),
   rate: z.number().min(0).default(0),
   amount_charged: z.number().min(0).default(0),
