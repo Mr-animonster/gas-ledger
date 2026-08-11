@@ -262,8 +262,8 @@ function StockRegisterPage() {
 
         <p className="mt-3 text-xs text-muted-foreground">
           Opening balances carry forward automatically from the previous entry, and closing
-          balances are calculated. Columns marked “auto-pull pending” will be fed by other
-          registers later.
+          balances are calculated. Columns marked “auto-pulled” come live from the Sales,
+          Connection/SV and Defective registers and cannot be typed here.
         </p>
 
         <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
@@ -286,12 +286,16 @@ function StockRegisterPage() {
                     key={c.field}
                     className="min-w-32 border-b border-border px-3 py-2 text-left font-semibold text-foreground"
                   >
+                    {c.label}
+                  </th>
+                ))}
+                {AUTO_COLUMNS.map((c) => (
+                  <th
+                    key={c.field}
+                    className="min-w-32 border-b border-border bg-primary/5 px-3 py-2 text-left font-semibold text-foreground"
+                  >
                     <span className="block">{c.label}</span>
-                    {c.pending ? (
-                      <span className="block text-[11px] font-normal text-muted-foreground">
-                        auto-pull pending
-                      </span>
-                    ) : null}
+                    <AutoBadge source={c.source} />
                   </th>
                 ))}
                 {CLOSING_COLUMNS.map((c) => (
@@ -345,6 +349,16 @@ function StockRegisterPage() {
                       )}
                     </td>
                   ))}
+                  {AUTO_COLUMNS.map((c) => (
+                    <td
+                      key={c.field}
+                      className="border-b border-border bg-primary/5 px-3 py-2 font-medium text-foreground"
+                      aria-readonly
+                      title={`Auto-pulled from the ${c.source}`}
+                    >
+                      {row[c.field]}
+                    </td>
+                  ))}
                   {CLOSING_COLUMNS.map((c) => (
                     <td
                       key={c.field}
@@ -355,6 +369,7 @@ function StockRegisterPage() {
                   ))}
                 </tr>
               ))}
+
             </tbody>
           </table>
         </div>
