@@ -11,25 +11,44 @@ import { computeClosing, type StockInputs } from "@/lib/stock-math";
 
 type EditableField =
   | "received_from_plant"
+  | "received_from_consumer_refill"
+  | "returned_to_plant";
+
+type AutoColumn =
   | "refill_sale"
   | "sv_new_issues"
   | "sv_reconnection_issues"
   | "sv_additional_issues"
-  | "received_from_consumer_refill"
   | "received_from_consumer_against_tv"
-  | "returned_to_plant"
-  | "defective_item_returned_to_plant";
+  | "defective_item_returned_to_plant"
+  | "newly_identified_defective";
 
-const EDITABLE_COLUMNS: { field: EditableField; label: string; pending?: boolean }[] = [
+const EDITABLE_COLUMNS: { field: EditableField; label: string }[] = [
   { field: "received_from_plant", label: "Recd. from Plant" },
-  { field: "refill_sale", label: "Refill Sale", pending: true },
-  { field: "sv_new_issues", label: "SV New", pending: true },
-  { field: "sv_reconnection_issues", label: "SV Reconnection", pending: true },
-  { field: "sv_additional_issues", label: "SV Additional", pending: true },
   { field: "received_from_consumer_refill", label: "Recd. Consumer (Refill)" },
-  { field: "received_from_consumer_against_tv", label: "Recd. Consumer (TV)" },
   { field: "returned_to_plant", label: "Returned to Plant" },
-  { field: "defective_item_returned_to_plant", label: "Defective to Plant", pending: true },
+];
+
+const AUTO_COLUMNS: { field: AutoColumn; label: string; source: string }[] = [
+  { field: "refill_sale", label: "Refill Sale", source: "Sales Register" },
+  { field: "sv_new_issues", label: "SV New", source: "Connection/SV Register" },
+  { field: "sv_reconnection_issues", label: "SV Reconnection", source: "Connection/SV Register" },
+  { field: "sv_additional_issues", label: "SV Additional", source: "Connection/SV Register" },
+  {
+    field: "received_from_consumer_against_tv",
+    label: "Recd. Consumer (TV)",
+    source: "Connection/SV Register",
+  },
+  {
+    field: "newly_identified_defective",
+    label: "Newly Defective",
+    source: "Defective Register",
+  },
+  {
+    field: "defective_item_returned_to_plant",
+    label: "Defective to Plant",
+    source: "Defective Register",
+  },
 ];
 
 const OPENING_COLUMNS: { field: keyof StockInputs; label: string }[] = [
@@ -45,6 +64,21 @@ const CLOSING_COLUMNS = [
   { field: "closing_defective_filled", label: "Cl. Def. Filled" },
   { field: "closing_defective_empty", label: "Cl. Def. Empty" },
 ] as const;
+
+function AutoBadge({ source }: { source: string }) {
+  return (
+    <span
+      title={`Auto-pulled from the ${source}`}
+      className="mt-0.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden className="h-3 w-3 fill-current">
+        <path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z" />
+      </svg>
+      auto-pulled
+    </span>
+  );
+}
+
 
 function todayISO() {
   const now = new Date();
