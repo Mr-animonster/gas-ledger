@@ -114,14 +114,14 @@ export async function verifyEditRequest(input: { requestId: string; code: string
   // Unlock BEFORE approving so the history trigger does not fire on the unlock itself.
   const primary = req.table_name as LockableTable;
   await supabaseAdmin
-    .from(primary)
+    .from(primary as "complaint_entries")
     .update({ locked: false, locked_at: null })
     .eq("id", req.entry_id);
 
   const coveredIds = (req.covered_ids ?? []) as string[];
   if (req.covered_table && coveredIds.length > 0) {
     await supabaseAdmin
-      .from(req.covered_table as LockableTable)
+      .from(req.covered_table as "complaint_entries")
       .update({ locked: false, locked_at: null })
       .in("id", coveredIds);
   }
