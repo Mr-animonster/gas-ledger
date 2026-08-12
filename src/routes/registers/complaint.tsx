@@ -303,9 +303,7 @@ function ComplaintRegisterPage() {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
             <h2 className="text-base font-semibold text-foreground">
               Complaints{" "}
-              <span className="text-sm font-normal text-muted-foreground">
-                ({openCount} open)
-              </span>
+              <span className="text-sm font-normal text-muted-foreground">({openCount} open)</span>
             </h2>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Sort by</span>

@@ -483,9 +483,7 @@ function SqcRegisterPage() {
                                 inputMode="decimal"
                                 aria-label={`${field} row ${index + 1}`}
                                 value={line[field]}
-                                onChange={(e) =>
-                                  setLine(index, field, Number(e.target.value) || 0)
-                                }
+                                onChange={(e) => setLine(index, field, Number(e.target.value) || 0)}
                                 className="h-11 w-28 rounded-md border border-input bg-background px-2 text-base text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
                               />
                             ) : (

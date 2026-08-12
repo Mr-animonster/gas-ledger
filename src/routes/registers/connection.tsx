@@ -88,7 +88,15 @@ const emptyForm = (): FormState => ({
 const inputClass =
   "h-12 w-full rounded-lg border border-input bg-background px-3 text-base text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";
 
-function Field({ label, hint, children }: { label: string; hint?: string | undefined; children: React.ReactNode }) {
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string | undefined;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block space-y-1.5">
       <span className="text-sm font-medium text-foreground">{label}</span>
@@ -169,8 +177,7 @@ function ConnectionRegisterPage() {
 
   const isTv = form.type === "TV";
   const checksMissing =
-    form.type === "New" &&
-    (!form.eligibility_check_done || !form.duplicate_household_check_done);
+    form.type === "New" && (!form.eligibility_check_done || !form.duplicate_household_check_done);
 
   async function submit(lock: boolean) {
     if (!form.consumer_no.trim() && !form.consumer_name.trim()) {
@@ -202,9 +209,7 @@ function ConnectionRegisterPage() {
           },
         },
       });
-      toast.success(
-        lock ? `Entry #${result.sr_no ?? ""} submitted and locked` : "Draft saved",
-      );
+      toast.success(lock ? `Entry #${result.sr_no ?? ""} submitted and locked` : "Draft saved");
       setForm(emptyForm());
       await refetch();
     } catch (error) {
@@ -214,8 +219,7 @@ function ConnectionRegisterPage() {
     }
   }
 
-  const packageName = (id: string | null) =>
-    packages.find((p) => p.id === id)?.code ?? "—";
+  const packageName = (id: string | null) => packages.find((p) => p.id === id)?.code ?? "—";
 
   return (
     <main className="min-h-screen bg-background pb-16">

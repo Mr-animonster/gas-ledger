@@ -11,10 +11,7 @@ import { getSessionState } from "@/lib/agency.functions";
 import { getStockDay, saveStockEntries } from "@/lib/stock.functions";
 import { computeClosing, type StockInputs } from "@/lib/stock-math";
 
-type EditableField =
-  | "received_from_plant"
-  | "received_from_consumer_refill"
-  | "returned_to_plant";
+type EditableField = "received_from_plant" | "received_from_consumer_refill" | "returned_to_plant";
 
 type AutoColumn =
   | "refill_sale"
@@ -80,7 +77,6 @@ function AutoBadge({ source }: { source: string }) {
     </span>
   );
 }
-
 
 function todayISO() {
   const now = new Date();
@@ -155,9 +151,7 @@ function StockRegisterPage() {
   }, [data]);
 
   const locked = data?.locked ?? false;
-  const stockRowIds = (data?.rows ?? [])
-    .map((r) => r.id)
-    .filter((id): id is string => Boolean(id));
+  const stockRowIds = (data?.rows ?? []).map((r) => r.id).filter((id): id is string => Boolean(id));
 
   const rows = useMemo(() => {
     if (!data) return [];
@@ -166,7 +160,6 @@ function StockRegisterPage() {
       const merged: StockInputs = { ...row, ...edits } as StockInputs;
       const tv = { tv_filled: row.tv_filled, tv_empty: row.tv_empty };
       return { ...row, ...merged, ...computeClosing(merged, tv) };
-
     });
   }, [data, draft]);
 
@@ -274,9 +267,9 @@ function StockRegisterPage() {
         </div>
 
         <p className="mt-3 text-xs text-muted-foreground">
-          Opening balances carry forward automatically from the previous entry, and closing
-          balances are calculated. Columns marked “auto-pulled” come live from the Sales,
-          Connection/SV and Defective registers and cannot be typed here.
+          Opening balances carry forward automatically from the previous entry, and closing balances
+          are calculated. Columns marked “auto-pulled” come live from the Sales, Connection/SV and
+          Defective registers and cannot be typed here.
         </p>
 
         <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
@@ -382,7 +375,6 @@ function StockRegisterPage() {
                   ))}
                 </tr>
               ))}
-
             </tbody>
           </table>
         </div>

@@ -30,9 +30,7 @@ export const saveStockEntries = createServerFn({ method: "POST" })
       .object({
         stockDate: dateSchema,
         filledBy: z.string().uuid().nullable().default(null),
-        rows: z.array(
-          z.object({ package_code_id: z.string().uuid(), values: valuesSchema }),
-        ),
+        rows: z.array(z.object({ package_code_id: z.string().uuid(), values: valuesSchema })),
       })
       .parse(input),
   )

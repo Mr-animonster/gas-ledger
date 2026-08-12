@@ -238,11 +238,7 @@ function SalesRegisterPage() {
     if (el instanceof HTMLInputElement) el.select();
   };
 
-  const onCellKeyDown = (
-    e: React.KeyboardEvent<HTMLElement>,
-    rowIndex: number,
-    col: string,
-  ) => {
+  const onCellKeyDown = (e: React.KeyboardEvent<HTMLElement>, rowIndex: number, col: string) => {
     if (e.key === "ArrowDown" || (e.key === "Enter" && col !== "consumer")) {
       e.preventDefault();
       if (rowIndex === rows.length - 1) addRow();
@@ -333,7 +329,7 @@ function SalesRegisterPage() {
             consumer_no: e.consumer_no ?? "",
             consumer_name: e.consumer_name ?? "",
             package_code_id: e.package_code_id ?? defaultPackageId,
-        item: e.item,
+            item: e.item,
             quantity: e.quantity,
             rate: e.rate,
             amount_charged: e.amount_charged,
@@ -493,11 +489,13 @@ function SalesRegisterPage() {
                       <ConsumerCell
                         row={row}
                         disabled={!canEdit}
-                        inputProps={{
-                          "data-row": index,
-                          "data-col": "consumer",
-                          onKeyDown: (e) => onCellKeyDown(e, index, "consumer"),
-                        } as React.InputHTMLAttributes<HTMLInputElement>}
+                        inputProps={
+                          {
+                            "data-row": index,
+                            "data-col": "consumer",
+                            onKeyDown: (e) => onCellKeyDown(e, index, "consumer"),
+                          } as React.InputHTMLAttributes<HTMLInputElement>
+                        }
                         onType={(value) =>
                           setRow(index, {
                             consumer_no: value,

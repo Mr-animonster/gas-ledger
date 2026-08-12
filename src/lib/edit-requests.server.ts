@@ -135,7 +135,9 @@ export async function listPendingEditRequests() {
   await requireDistributor();
   const { data, error } = await supabaseAdmin
     .from("edit_requests")
-    .select("id, table_name, entry_id, otp_preview, otp_sent_to, expires_at, requested_at, status, requested_by, staff:requested_by(name)")
+    .select(
+      "id, table_name, entry_id, otp_preview, otp_sent_to, expires_at, requested_at, status, requested_by, staff:requested_by(name)",
+    )
     .eq("status", "pending")
     .gt("expires_at", new Date().toISOString())
     .order("requested_at", { ascending: false })

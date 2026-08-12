@@ -4,7 +4,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { PendingEditRequests } from "@/components/PendingEditRequests";
 import { getSessionState, logoutAgency } from "@/lib/agency.functions";
 
-
 type Role = "distributor" | "godown" | "computer_staff";
 
 const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = [
@@ -62,7 +61,6 @@ const registers: { name: string; hint: string; roles: Role[]; to?: string }[] = 
     roles: ["distributor"],
     to: "/registers/inspection",
   },
-
 ];
 
 const roleLabels: Record<Role, string> = {
@@ -112,9 +110,7 @@ function DashboardPage() {
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               {session.agencyName}
             </p>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              {roleLabels[role]}
-            </h1>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">{roleLabels[role]}</h1>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -152,16 +148,13 @@ function DashboardPage() {
               }}
               className="min-h-24 rounded-xl border border-border bg-card p-4 text-left shadow-sm transition-colors hover:border-primary hover:bg-secondary"
             >
-              <span className="block text-base font-semibold text-foreground">
-                {register.name}
-              </span>
+              <span className="block text-base font-semibold text-foreground">{register.name}</span>
               <span className="mt-1 block text-sm text-muted-foreground">{register.hint}</span>
             </button>
           ))}
         </div>
         {role === "distributor" ? <PendingEditRequests /> : null}
       </div>
-
     </main>
   );
 }
