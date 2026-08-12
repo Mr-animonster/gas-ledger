@@ -402,6 +402,8 @@ export type Database = {
       }
       edit_requests: {
         Row: {
+          covered_ids: string[]
+          covered_table: string | null
           created_at: string
           entry_id: string
           expires_at: string
@@ -417,6 +419,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          covered_ids?: string[]
+          covered_table?: string | null
           created_at?: string
           entry_id: string
           expires_at?: string
@@ -432,6 +436,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          covered_ids?: string[]
+          covered_table?: string | null
           created_at?: string
           entry_id?: string
           expires_at?: string
