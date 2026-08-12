@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { getSessionState } from "@/lib/agency.functions";
 import { listComplaints, saveComplaint } from "@/lib/complaint.functions";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
+import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
 
 export const Route = createFileRoute("/registers/complaint")({

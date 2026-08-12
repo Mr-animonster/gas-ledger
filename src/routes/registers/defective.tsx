@@ -8,6 +8,7 @@ import { getSessionState } from "@/lib/agency.functions";
 import { listDefectives, saveDefective } from "@/lib/defective.functions";
 import { getPackageCodes } from "@/lib/reference.functions";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
+import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
 
 export const Route = createFileRoute("/registers/defective")({
