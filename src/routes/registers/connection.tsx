@@ -130,6 +130,8 @@ function ConnectionRegisterPage() {
   const [processedBy, setProcessedBy] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const editedIds = useEditedIds("connection_sv_entries");
+
   const { data: rows = [], refetch } = useQuery({
     queryKey: ["connection-entries"],
     queryFn: () => fetchList({}),

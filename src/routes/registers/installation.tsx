@@ -100,6 +100,8 @@ function InstallationRegisterPage() {
   const [filledBy, setFilledBy] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const editedIds = useEditedIds("installation_arb_entries");
+
   const { data: rows = [], refetch } = useQuery({
     queryKey: ["installation-entries"],
     queryFn: () => fetchList({}),

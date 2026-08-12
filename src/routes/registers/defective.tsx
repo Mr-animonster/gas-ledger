@@ -146,6 +146,8 @@ function DefectiveRegisterPage() {
   const [filledBy, setFilledBy] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const editedIds = useEditedIds("defective_entries");
+
   const { data: rows = [], refetch } = useQuery({
     queryKey: ["defective-entries"],
     queryFn: () => fetchList({}),

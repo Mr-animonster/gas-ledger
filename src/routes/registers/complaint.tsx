@@ -93,6 +93,8 @@ function ComplaintRegisterPage() {
   const fetchList = useServerFn(listComplaints);
   const save = useServerFn(saveComplaint);
 
+  const editedIds = useEditedIds("complaint_entries");
+
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["complaints"],
     queryFn: () => fetchList({}),
