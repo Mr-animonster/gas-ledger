@@ -8,6 +8,7 @@ import { getSessionState } from "@/lib/agency.functions";
 import { listDefectives, saveDefective } from "@/lib/defective.functions";
 import { getPackageCodes } from "@/lib/reference.functions";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
+import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
 
 export const Route = createFileRoute("/registers/defective")({
@@ -145,6 +146,8 @@ function DefectiveRegisterPage() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [filledBy, setFilledBy] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const editedIds = useEditedIds("defective_entries");
 
   const { data: rows = [], refetch } = useQuery({
     queryKey: ["defective-entries"],
@@ -599,17 +602,14 @@ function DefectiveRegisterPage() {
                           : "Pending"}
                     </td>
                     <td className="px-3 py-2">
-                      {row.locked ? (
-                        <span className="text-xs font-semibold text-muted-foreground">Locked</span>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => loadEntry(row)}
-                          className="rounded-md border border-input px-2 py-1 text-xs font-semibold text-primary hover:bg-secondary"
-                        >
-                          Edit
-                        </button>
-                      )}
+                      <EntryLockCell
+                        tableName="defective_entries"
+                        entryId={row.id}
+                        locked={Boolean(row.locked)}
+                        edited={editedIds.has(row.id)}
+                        onEdit={() => loadEntry(row)}
+                        onUnlocked={() => void refetch()}
+                      />
                     </td>
                   </tr>
                 ))}

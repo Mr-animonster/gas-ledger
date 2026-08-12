@@ -64,20 +64,20 @@ export async function getSalesDay(date: string) {
       ...batch,
       photo_url: await signPhoto(batch.booklet_page_photo_ref),
       entries: entries
-        .filter((e) => e['batch_id'] === batch.id)
+        .filter((e) => e["batch_id"] === batch.id)
         .map((e) => ({
-          id: String(e['id']),
-          cash_memo_no: Number(e['cash_memo_no']),
-          consumer_id: (e['consumer_id'] as string | null) ?? null,
-          consumer_no: (e['consumer_no'] as string | null) ?? null,
-          consumer_name: (e['consumer_name'] as string | null) ?? null,
-          package_code_id: (e['package_code_id'] as string | null) ?? null,
-          item: e['item'] as SaleItem,
-          quantity: Number(e['quantity']),
-          rate: Number(e['rate']),
-          amount_charged: Number(e['amount_charged']),
-          payment_mode: e['payment_mode'] as "Cash" | "UPI" | "Card",
-          pdc_done: Boolean(e['pdc_done']),
+          id: String(e["id"]),
+          cash_memo_no: Number(e["cash_memo_no"]),
+          consumer_id: (e["consumer_id"] as string | null) ?? null,
+          consumer_no: (e["consumer_no"] as string | null) ?? null,
+          consumer_name: (e["consumer_name"] as string | null) ?? null,
+          package_code_id: (e["package_code_id"] as string | null) ?? null,
+          item: e["item"] as SaleItem,
+          quantity: Number(e["quantity"]),
+          rate: Number(e["rate"]),
+          amount_charged: Number(e["amount_charged"]),
+          payment_mode: e["payment_mode"] as "Cash" | "UPI" | "Card",
+          pdc_done: Boolean(e["pdc_done"]),
         })),
     })),
   );
@@ -189,10 +189,7 @@ export async function saveSalesBatch(input: {
   }
 
   for (const row of input.rows.filter((r) => r.id)) {
-    const { error } = await supabaseAdmin
-      .from("sales_entries")
-      .update(base(row))
-      .eq("id", row.id!);
+    const { error } = await supabaseAdmin.from("sales_entries").update(base(row)).eq("id", row.id!);
     if (error) throw new Error("Could not update an existing cash memo.");
   }
 

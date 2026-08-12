@@ -139,7 +139,9 @@ export function ConsumerSearch({
           </ul>
         ) : null}
       </div>
-      <p className="text-xs text-muted-foreground">Type at least 2 characters of the number or name.</p>
+      <p className="text-xs text-muted-foreground">
+        Type at least 2 characters of the number or name.
+      </p>
     </div>
   );
 }

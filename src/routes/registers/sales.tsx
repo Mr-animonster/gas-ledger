@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { EditedBadge } from "@/components/EditedBadge";
+import { RequestEditButton } from "@/components/RequestEditButton";
 import { FilledBySelect } from "@/components/FilledBySelect";
 import { getSessionState } from "@/lib/agency.functions";
 import { getPackageCodes, searchConsumers } from "@/lib/reference.functions";
@@ -236,11 +238,7 @@ function SalesRegisterPage() {
     if (el instanceof HTMLInputElement) el.select();
   };
 
-  const onCellKeyDown = (
-    e: React.KeyboardEvent<HTMLElement>,
-    rowIndex: number,
-    col: string,
-  ) => {
+  const onCellKeyDown = (e: React.KeyboardEvent<HTMLElement>, rowIndex: number, col: string) => {
     if (e.key === "ArrowDown" || (e.key === "Enter" && col !== "consumer")) {
       e.preventDefault();
       if (rowIndex === rows.length - 1) addRow();
@@ -331,7 +329,7 @@ function SalesRegisterPage() {
             consumer_no: e.consumer_no ?? "",
             consumer_name: e.consumer_name ?? "",
             package_code_id: e.package_code_id ?? defaultPackageId,
-        item: e.item,
+            item: e.item,
             quantity: e.quantity,
             rate: e.rate,
             amount_charged: e.amount_charged,
@@ -445,13 +443,18 @@ function SalesRegisterPage() {
             <span className="text-sm font-medium text-foreground">
               This batch is submitted and locked — read-only.
             </span>
-            <button
-              type="button"
-              onClick={() => toast.info("Edit request sent to the distributor for OTP approval.")}
-              className="h-10 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground"
-            >
-              Request Edit
-            </button>
+            {currentBatch ? (
+              <>
+                <RequestEditButton
+                  tableName="sales_batches"
+                  entryId={currentBatch.id}
+                  coveredTable="sales_entries"
+                  coveredIds={currentBatch.entries.map((e) => e.id)}
+                  onUnlocked={() => void day.refetch()}
+                />
+                <EditedBadge tableName="sales_batches" entryId={currentBatch.id} />
+              </>
+            ) : null}
           </div>
         ) : null}
 
@@ -486,11 +489,13 @@ function SalesRegisterPage() {
                       <ConsumerCell
                         row={row}
                         disabled={!canEdit}
-                        inputProps={{
-                          "data-row": index,
-                          "data-col": "consumer",
-                          onKeyDown: (e) => onCellKeyDown(e, index, "consumer"),
-                        } as React.InputHTMLAttributes<HTMLInputElement>}
+                        inputProps={
+                          {
+                            "data-row": index,
+                            "data-col": "consumer",
+                            onKeyDown: (e) => onCellKeyDown(e, index, "consumer"),
+                          } as React.InputHTMLAttributes<HTMLInputElement>
+                        }
                         onType={(value) =>
                           setRow(index, {
                             consumer_no: value,

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { getSessionState } from "@/lib/agency.functions";
 import { listInstallations, saveConsumer, saveInstallation } from "@/lib/installation.functions";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
+import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
 
 export const Route = createFileRoute("/registers/installation")({
@@ -99,6 +100,8 @@ function InstallationRegisterPage() {
   const [form, setForm] = useState<FormState>(emptyForm);
   const [filledBy, setFilledBy] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const editedIds = useEditedIds("installation_arb_entries");
 
   const { data: rows = [], refetch } = useQuery({
     queryKey: ["installation-entries"],
@@ -465,15 +468,13 @@ function InstallationRegisterPage() {
                           ₹ {row.total_receipt_amount.toFixed(2)}
                         </td>
                         <td className="px-4 py-3">
-                          {row.locked ? (
-                            <span className="rounded-md bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground">
-                              Locked
-                            </span>
-                          ) : (
-                            <span className="rounded-md bg-accent px-2 py-1 text-xs font-semibold text-accent-foreground">
-                              Draft
-                            </span>
-                          )}
+                          <EntryLockCell
+                            tableName="installation_arb_entries"
+                            entryId={row.id}
+                            locked={Boolean(row.locked)}
+                            edited={editedIds.has(row.id)}
+                            onUnlocked={() => void refetch()}
+                          />
                         </td>
                       </tr>
                     );

@@ -127,11 +127,7 @@ export async function listActiveStaff(roles: AppRole[]) {
   const session = await getAppSession();
   if (!session.data.authed) throw new Error("Not signed in");
 
-  let query = supabaseAdmin
-    .from("staff")
-    .select("id, name, role")
-    .eq("active", true)
-    .order("name");
+  let query = supabaseAdmin.from("staff").select("id, name, role").eq("active", true).order("name");
 
   if (roles.length > 0) query = query.in("role", roles);
 

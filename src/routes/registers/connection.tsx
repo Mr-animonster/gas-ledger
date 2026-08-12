@@ -9,6 +9,7 @@ import { listCashMemos, listConnections, saveConnection } from "@/lib/connection
 import { getPackageCodes } from "@/lib/reference.functions";
 import { last4, maskedDisplay } from "@/lib/connection-mask";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
+import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
 
 export const Route = createFileRoute("/registers/connection")({
@@ -87,7 +88,15 @@ const emptyForm = (): FormState => ({
 const inputClass =
   "h-12 w-full rounded-lg border border-input bg-background px-3 text-base text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30";
 
-function Field({ label, hint, children }: { label: string; hint?: string | undefined; children: React.ReactNode }) {
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string | undefined;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block space-y-1.5">
       <span className="text-sm font-medium text-foreground">{label}</span>
@@ -130,6 +139,8 @@ function ConnectionRegisterPage() {
   const [processedBy, setProcessedBy] = useState("");
   const [busy, setBusy] = useState(false);
 
+  const editedIds = useEditedIds("connection_sv_entries");
+
   const { data: rows = [], refetch } = useQuery({
     queryKey: ["connection-entries"],
     queryFn: () => fetchList({}),
@@ -166,8 +177,7 @@ function ConnectionRegisterPage() {
 
   const isTv = form.type === "TV";
   const checksMissing =
-    form.type === "New" &&
-    (!form.eligibility_check_done || !form.duplicate_household_check_done);
+    form.type === "New" && (!form.eligibility_check_done || !form.duplicate_household_check_done);
 
   async function submit(lock: boolean) {
     if (!form.consumer_no.trim() && !form.consumer_name.trim()) {
@@ -199,9 +209,7 @@ function ConnectionRegisterPage() {
           },
         },
       });
-      toast.success(
-        lock ? `Entry #${result.sr_no ?? ""} submitted and locked` : "Draft saved",
-      );
+      toast.success(lock ? `Entry #${result.sr_no ?? ""} submitted and locked` : "Draft saved");
       setForm(emptyForm());
       await refetch();
     } catch (error) {
@@ -211,8 +219,7 @@ function ConnectionRegisterPage() {
     }
   }
 
-  const packageName = (id: string | null) =>
-    packages.find((p) => p.id === id)?.code ?? "—";
+  const packageName = (id: string | null) => packages.find((p) => p.id === id)?.code ?? "—";
 
   return (
     <main className="min-h-screen bg-background pb-16">
@@ -494,11 +501,13 @@ function ConnectionRegisterPage() {
                     <td className="px-3 py-2">{row.filled_empty_at_tv_retrieval}</td>
                     <td className="px-3 py-2">{row.cash_memo_no ?? "—"}</td>
                     <td className="px-3 py-2">
-                      {row.locked ? (
-                        <span className="text-xs font-semibold text-muted-foreground">Locked</span>
-                      ) : (
-                        <span className="text-xs font-semibold text-primary">Draft</span>
-                      )}
+                      <EntryLockCell
+                        tableName="connection_sv_entries"
+                        entryId={row.id}
+                        locked={Boolean(row.locked)}
+                        edited={editedIds.has(row.id)}
+                        onUnlocked={() => void refetch()}
+                      />
                     </td>
                   </tr>
                 ))}

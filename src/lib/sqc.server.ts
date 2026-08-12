@@ -63,15 +63,17 @@ export async function listSqcEntries() {
 
 export async function getSqcEntry(id: string) {
   await requireSession();
-  const [{ data: entry, error }, { data: items, error: itemsError }, tolerance] = await Promise.all([
-    supabaseAdmin.from("sqc_entries").select("*").eq("id", id).maybeSingle(),
-    supabaseAdmin
-      .from("sqc_line_items")
-      .select("*")
-      .eq("sqc_entry_id", id)
-      .order("s_no", { ascending: true }),
-    getToleranceGrams(),
-  ]);
+  const [{ data: entry, error }, { data: items, error: itemsError }, tolerance] = await Promise.all(
+    [
+      supabaseAdmin.from("sqc_entries").select("*").eq("id", id).maybeSingle(),
+      supabaseAdmin
+        .from("sqc_line_items")
+        .select("*")
+        .eq("sqc_entry_id", id)
+        .order("s_no", { ascending: true }),
+      getToleranceGrams(),
+    ],
+  );
   if (error || itemsError) throw new Error("Could not load this SQC entry.");
   if (!entry) throw new Error("SQC entry not found.");
   return {

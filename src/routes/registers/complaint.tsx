@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { getSessionState } from "@/lib/agency.functions";
 import { listComplaints, saveComplaint } from "@/lib/complaint.functions";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
+import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
 
 export const Route = createFileRoute("/registers/complaint")({
@@ -92,6 +93,8 @@ function ComplaintRegisterPage() {
 
   const fetchList = useServerFn(listComplaints);
   const save = useServerFn(saveComplaint);
+
+  const editedIds = useEditedIds("complaint_entries");
 
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["complaints"],
@@ -300,9 +303,7 @@ function ComplaintRegisterPage() {
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border p-4">
             <h2 className="text-base font-semibold text-foreground">
               Complaints{" "}
-              <span className="text-sm font-normal text-muted-foreground">
-                ({openCount} open)
-              </span>
+              <span className="text-sm font-normal text-muted-foreground">({openCount} open)</span>
             </h2>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Sort by</span>
@@ -375,10 +376,13 @@ function ComplaintRegisterPage() {
                       )}
                     </td>
                     <td className="px-3 py-3">
-                      <button
-                        type="button"
-                        className="rounded-md px-2 py-1 text-sm font-medium text-primary hover:bg-secondary"
-                        onClick={() =>
+                      <EntryLockCell
+                        tableName="complaint_entries"
+                        entryId={row.id}
+                        locked={Boolean(row.locked)}
+                        edited={editedIds.has(row.id)}
+                        onUnlocked={() => void refetch()}
+                        onEdit={() =>
                           setForm({
                             id: row.id,
                             entry_date: row.entry_date,
@@ -393,9 +397,7 @@ function ComplaintRegisterPage() {
                             resolved_by: row.resolved_by ?? "",
                           })
                         }
-                      >
-                        Edit
-                      </button>
+                      />
                     </td>
                   </tr>
                 ))}
