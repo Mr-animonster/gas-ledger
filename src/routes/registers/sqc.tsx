@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { EditedBadge } from "@/components/EditedBadge";
+import { RequestEditButton } from "@/components/RequestEditButton";
 import { FilledBySelect } from "@/components/FilledBySelect";
 import { getSessionState } from "@/lib/agency.functions";
 import { getPackageCodes } from "@/lib/reference.functions";
@@ -304,13 +306,20 @@ function SqcRegisterPage() {
               <span className="text-sm font-medium text-foreground">
                 This truck entry is submitted and locked — read-only.
               </span>
-              <button
-                type="button"
-                onClick={() => toast.info("Edit request sent to the distributor for OTP approval.")}
-                className="h-10 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground"
-              >
-                Request Edit
-              </button>
+              {selectedId ? (
+                <>
+                  <RequestEditButton
+                    tableName="sqc_entries"
+                    entryId={selectedId}
+                    requestedBy={filledBy || null}
+                    onUnlocked={() => {
+                      setLocked(false);
+                      void list.refetch();
+                    }}
+                  />
+                  <EditedBadge tableName="sqc_entries" entryId={selectedId} />
+                </>
+              ) : null}
             </div>
           ) : null}
 

@@ -4,7 +4,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+import { EditedBadge } from "@/components/EditedBadge";
 import { FilledBySelect } from "@/components/FilledBySelect";
+import { RequestEditButton } from "@/components/RequestEditButton";
 import { getSessionState } from "@/lib/agency.functions";
 import { getStockDay, saveStockEntries } from "@/lib/stock.functions";
 import { computeClosing, type StockInputs } from "@/lib/stock-math";
@@ -234,13 +236,19 @@ function StockRegisterPage() {
                 <span className="text-sm font-medium text-foreground">
                   This day is locked — entries are read-only.
                 </span>
-                <button
-                  type="button"
-                  onClick={() => toast.info("Edit request sent to the distributor for approval.")}
-                  className="h-10 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground"
-                >
-                  Request Edit
-                </button>
+                {stockRowIds.length > 0 ? (
+                  <>
+                    <RequestEditButton
+                      tableName="stock_entries"
+                      entryId={stockRowIds[0]!}
+                      coveredTable="stock_entries"
+                      coveredIds={stockRowIds}
+                      requestedBy={filledBy || null}
+                      onUnlocked={() => void refetch()}
+                    />
+                    <EditedBadge tableName="stock_entries" entryId={stockRowIds[0]!} />
+                  </>
+                ) : null}
               </div>
             </div>
           ) : (
