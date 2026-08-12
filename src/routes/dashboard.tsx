@@ -1,7 +1,9 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 
+import { PendingEditRequests } from "@/components/PendingEditRequests";
 import { getSessionState, logoutAgency } from "@/lib/agency.functions";
+
 
 type Role = "distributor" | "godown" | "computer_staff";
 
@@ -157,10 +159,9 @@ function DashboardPage() {
             </button>
           ))}
         </div>
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          More register entry screens are coming next.
-        </p>
+        {role === "distributor" ? <PendingEditRequests /> : null}
       </div>
+
     </main>
   );
 }
