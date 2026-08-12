@@ -400,6 +400,113 @@ export type Database = {
         }
         Relationships: []
       }
+      edit_requests: {
+        Row: {
+          created_at: string
+          entry_id: string
+          expires_at: string
+          id: string
+          otp_hash: string
+          otp_preview: string | null
+          otp_sent_to: string | null
+          requested_at: string
+          requested_by: string | null
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["edit_request_status"]
+          table_name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          entry_id: string
+          expires_at?: string
+          id?: string
+          otp_hash: string
+          otp_preview?: string | null
+          otp_sent_to?: string | null
+          requested_at?: string
+          requested_by?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["edit_request_status"]
+          table_name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          entry_id?: string
+          expires_at?: string
+          id?: string
+          otp_hash?: string
+          otp_preview?: string | null
+          otp_sent_to?: string | null
+          requested_at?: string
+          requested_by?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["edit_request_status"]
+          table_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "edit_requests_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      entry_edit_history: {
+        Row: {
+          edit_request_id: string | null
+          edited_at: string
+          edited_by: string | null
+          entry_id: string
+          field_name: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          table_name: string
+        }
+        Insert: {
+          edit_request_id?: string | null
+          edited_at?: string
+          edited_by?: string | null
+          entry_id: string
+          field_name: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          table_name: string
+        }
+        Update: {
+          edit_request_id?: string | null
+          edited_at?: string
+          edited_by?: string | null
+          entry_id?: string
+          field_name?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          table_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entry_edit_history_edit_request_id_fkey"
+            columns: ["edit_request_id"]
+            isOneToOne: false
+            referencedRelation: "edit_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "entry_edit_history_edited_by_fkey"
+            columns: ["edited_by"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inspection_entries: {
         Row: {
           created_at: string
@@ -1126,6 +1233,7 @@ export type Database = {
         Args: { p_id: string; p_payload: Json; p_role: string }
         Returns: string
       }
+      lock_todays_entries: { Args: never; Returns: undefined }
       wage_entries_list: {
         Args: { p_month?: string; p_role: string }
         Returns: {
@@ -1167,6 +1275,7 @@ export type Database = {
       consumer_scheme: "Regular" | "PMUY" | "Extended PMUY" | "PMUY-2"
       defect_seal_condition: "OK" | "Damaged" | "N/A"
       defect_source: "Truck" | "Consumer"
+      edit_request_status: "pending" | "approved" | "expired"
       inspection_type: "Routine" | "Surprise" | "Investigation"
       irregularity_category: "Critical" | "Major" | "Minor" | "None"
       leaky_location: "None" | "Body" | "Bung"
@@ -1307,6 +1416,7 @@ export const Constants = {
       consumer_scheme: ["Regular", "PMUY", "Extended PMUY", "PMUY-2"],
       defect_seal_condition: ["OK", "Damaged", "N/A"],
       defect_source: ["Truck", "Consumer"],
+      edit_request_status: ["pending", "approved", "expired"],
       inspection_type: ["Routine", "Surprise", "Investigation"],
       irregularity_category: ["Critical", "Major", "Minor", "None"],
       leaky_location: ["None", "Body", "Bung"],
