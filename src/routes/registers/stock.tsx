@@ -155,6 +155,9 @@ function StockRegisterPage() {
   }, [data]);
 
   const locked = data?.locked ?? false;
+  const stockRowIds = (data?.rows ?? [])
+    .map((r) => r.id)
+    .filter((id): id is string => Boolean(id));
 
   const rows = useMemo(() => {
     if (!data) return [];

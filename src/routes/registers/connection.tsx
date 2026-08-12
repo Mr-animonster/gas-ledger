@@ -494,11 +494,13 @@ function ConnectionRegisterPage() {
                     <td className="px-3 py-2">{row.filled_empty_at_tv_retrieval}</td>
                     <td className="px-3 py-2">{row.cash_memo_no ?? "—"}</td>
                     <td className="px-3 py-2">
-                      {row.locked ? (
-                        <span className="text-xs font-semibold text-muted-foreground">Locked</span>
-                      ) : (
-                        <span className="text-xs font-semibold text-primary">Draft</span>
-                      )}
+                      <EntryLockCell
+                        tableName="connection_sv_entries"
+                        entryId={row.id}
+                        locked={Boolean(row.locked)}
+                        edited={editedIds.has(row.id)}
+                        onUnlocked={() => void refetch()}
+                      />
                     </td>
                   </tr>
                 ))}
