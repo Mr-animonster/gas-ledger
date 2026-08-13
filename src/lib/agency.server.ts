@@ -1,3 +1,5 @@
+import { scryptSync, timingSafeEqual } from "crypto";
+
 import { useSession } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
@@ -27,6 +29,16 @@ export async function readSession() {
   };
 }
 
+function verifyPassword(stored: string, supplied: string) {
+  const parts = stored.split("$");
+  if (parts.length !== 3 || parts[0] !== "scrypt") return false;
+  const salt = parts[1]!;
+  const hash = parts[2]!;
+  const expected = Buffer.from(hash, "hex");
+  const actual = scryptSync(supplied, salt, expected.length);
+  return expected.length === actual.length && timingSafeEqual(expected, actual);
+}
+
 export async function loginWithAgencyCredentials(agencyId: string, password: string) {
   const { data, error } = await supabaseAdmin
     .from("distributor_settings")
@@ -38,7 +50,7 @@ export async function loginWithAgencyCredentials(agencyId: string, password: str
   if (
     !data ||
     data.agency_id.trim().toLowerCase() !== agencyId.trim().toLowerCase() ||
-    data.password !== password
+    !verifyPassword(data.password, password)
   ) {
     return { ok: false as const };
   }
@@ -89,12 +101,12 @@ export async function createDistributorOtp() {
   });
   if (insertError) throw new Error("Could not generate a verification code.");
 
-  // SMS delivery is not wired up yet — the code is surfaced in the UI for testing.
+  // The code is delivered out-of-band to the distributor's registered phone only.
+  // It is deliberately never returned to the caller.
   return {
     ok: true as const,
     maskedPhone: maskPhone(settings.phone_number),
     expiresAt,
-    devCode: code,
   };
 }
 
