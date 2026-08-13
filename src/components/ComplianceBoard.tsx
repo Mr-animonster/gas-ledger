@@ -18,23 +18,23 @@ function shiftDate(date: string, days: number) {
 const STATUS_STYLES: Record<string, { label: string; chip: string; card: string }> = {
   locked: {
     label: "Filled & Locked",
-    chip: "bg-[hsl(var(--status-ok))] text-[hsl(var(--status-ok-foreground))]",
-    card: "border-[hsl(var(--status-ok))]/50",
+    chip: "bg-ok text-ok-foreground",
+    card: "border-ok/50",
   },
   filled: {
     label: "Filled",
-    chip: "bg-[hsl(var(--status-ok))] text-[hsl(var(--status-ok-foreground))]",
-    card: "border-[hsl(var(--status-ok))]/50",
+    chip: "bg-ok text-ok-foreground",
+    card: "border-ok/50",
   },
   in_progress: {
     label: "In Progress",
-    chip: "bg-[hsl(var(--status-warn))] text-[hsl(var(--status-warn-foreground))]",
-    card: "border-[hsl(var(--status-warn))]/60",
+    chip: "bg-warn text-warn-foreground",
+    card: "border-warn/60",
   },
   filled_late: {
     label: "Filled (not locked)",
-    chip: "bg-[hsl(var(--status-warn))] text-[hsl(var(--status-warn-foreground))]",
-    card: "border-[hsl(var(--status-warn))]/60",
+    chip: "bg-warn text-warn-foreground",
+    card: "border-warn/60",
   },
   missing: {
     label: "Not Started",
@@ -170,8 +170,8 @@ export function ComplianceBoard() {
           </h3>
           <div className="flex items-center gap-3">
             <div className="hidden items-center gap-3 text-[11px] text-muted-foreground sm:flex">
-              <Legend className="bg-[hsl(var(--status-ok))]" text="On time" />
-              <Legend className="bg-[hsl(var(--status-warn))]" text="Late / open" />
+              <Legend className="bg-ok" text="On time" />
+              <Legend className="bg-warn" text="Late / open" />
               <Legend className="bg-destructive" text="Missed" />
             </div>
             <div className="flex overflow-hidden rounded-lg border border-input">
@@ -206,9 +206,9 @@ export function ComplianceBoard() {
                     title={`${reg.label} — ${cell.date}: ${cell.status.replace("_", " ")}`}
                     className={`h-5 w-5 rounded-sm ${
                       cell.status === "on_time"
-                        ? "bg-[hsl(var(--status-ok))]"
+                        ? "bg-ok"
                         : cell.status === "late"
-                          ? "bg-[hsl(var(--status-warn))]"
+                          ? "bg-warn"
                           : "bg-destructive/70"
                     }`}
                   />
