@@ -27,6 +27,15 @@ export async function readSession() {
   };
 }
 
+function verifyPassword(stored: string, supplied: string) {
+  const parts = stored.split("$");
+  if (parts.length !== 3 || parts[0] !== "scrypt") return false;
+  const [, salt, hash] = parts;
+  const expected = Buffer.from(hash, "hex");
+  const actual = scryptSync(supplied, salt, expected.length);
+  return expected.length === actual.length && timingSafeEqual(expected, actual);
+}
+
 export async function loginWithAgencyCredentials(agencyId: string, password: string) {
   const { data, error } = await supabaseAdmin
     .from("distributor_settings")
@@ -38,7 +47,7 @@ export async function loginWithAgencyCredentials(agencyId: string, password: str
   if (
     !data ||
     data.agency_id.trim().toLowerCase() !== agencyId.trim().toLowerCase() ||
-    data.password !== password
+    !verifyPassword(data.password, password)
   ) {
     return { ok: false as const };
   }
