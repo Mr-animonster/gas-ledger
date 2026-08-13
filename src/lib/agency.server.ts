@@ -1,3 +1,5 @@
+import { scryptSync, timingSafeEqual } from "crypto";
+
 import { useSession } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
@@ -30,7 +32,8 @@ export async function readSession() {
 function verifyPassword(stored: string, supplied: string) {
   const parts = stored.split("$");
   if (parts.length !== 3 || parts[0] !== "scrypt") return false;
-  const [, salt, hash] = parts;
+  const salt = parts[1]!;
+  const hash = parts[2]!;
   const expected = Buffer.from(hash, "hex");
   const actual = scryptSync(supplied, salt, expected.length);
   return expected.length === actual.length && timingSafeEqual(expected, actual);
