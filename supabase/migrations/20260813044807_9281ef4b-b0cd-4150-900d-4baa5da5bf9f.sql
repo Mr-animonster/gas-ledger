@@ -1,0 +1,2 @@
+UPDATE public.distributor_settings
+SET password = 'pbkdf2$150000$fd28140cba941ad85f4f948ab1ababbd$c9784195f53d4e5ba4a5c01ef1bab2fdef365d17525f9fd960e8506efa854065';

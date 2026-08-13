@@ -1,6 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 
+import { ComplianceBoard } from "@/components/ComplianceBoard";
 import { PendingEditRequests } from "@/components/PendingEditRequests";
 import { getSessionState, logoutAgency } from "@/lib/agency.functions";
 
@@ -105,7 +106,7 @@ function DashboardPage() {
   return (
     <main className="min-h-screen bg-background pb-14">
       <header className="border-b border-border bg-card">
-        <div className="mx-auto flex w-full max-w-3xl items-center justify-between gap-3 px-4 py-4">
+        <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
               {session.agencyName}
@@ -134,7 +135,13 @@ function DashboardPage() {
         </div>
       </header>
 
-      <div className="mx-auto w-full max-w-3xl px-4 py-6">
+      <div className="mx-auto w-full max-w-5xl px-4 py-6">
+        {role === "distributor" ? (
+          <div className="mb-8 space-y-8">
+            <ComplianceBoard />
+            <PendingEditRequests />
+          </div>
+        ) : null}
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Registers
         </h2>
@@ -153,7 +160,6 @@ function DashboardPage() {
             </button>
           ))}
         </div>
-        {role === "distributor" ? <PendingEditRequests /> : null}
       </div>
     </main>
   );
