@@ -1,5 +1,3 @@
-import { scryptSync, timingSafeEqual } from "crypto";
-
 import { useSession } from "@tanstack/react-start/server";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
@@ -29,14 +27,40 @@ export async function readSession() {
   };
 }
 
-function verifyPassword(stored: string, supplied: string) {
+async function verifyPassword(stored: string, supplied: string) {
   const parts = stored.split("$");
-  if (parts.length !== 3 || parts[0] !== "scrypt") return false;
-  const salt = parts[1]!;
-  const hash = parts[2]!;
-  const expected = Buffer.from(hash, "hex");
-  const actual = scryptSync(supplied, salt, expected.length);
-  return expected.length === actual.length && timingSafeEqual(expected, actual);
+  if (parts.length !== 4 || parts[0] !== "pbkdf2") return false;
+  const iterations = Number(parts[1]);
+  const salt = parts[2]!;
+  const expected = parts[3]!;
+  if (!Number.isFinite(iterations) || iterations < 1) return false;
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(supplied),
+    "PBKDF2",
+    false,
+    ["deriveBits"],
+  );
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      hash: "SHA-256",
+      salt: new TextEncoder().encode(salt),
+      iterations,
+    },
+    key,
+    (expected.length / 2) * 8,
+  );
+  const actual = Array.from(new Uint8Array(bits))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  // Constant-time-ish comparison over equal-length hex strings.
+  if (actual.length !== expected.length) return false;
+  let diff = 0;
+  for (let i = 0; i < actual.length; i += 1) diff |= actual.charCodeAt(i) ^ expected.charCodeAt(i);
+  return diff === 0;
 }
 
 export async function loginWithAgencyCredentials(agencyId: string, password: string) {
@@ -50,7 +74,7 @@ export async function loginWithAgencyCredentials(agencyId: string, password: str
   if (
     !data ||
     data.agency_id.trim().toLowerCase() !== agencyId.trim().toLowerCase() ||
-    !verifyPassword(data.password, password)
+    !(await verifyPassword(data.password, password))
   ) {
     return { ok: false as const };
   }
