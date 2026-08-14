@@ -10,6 +10,7 @@ import { RequestEditButton } from "@/components/RequestEditButton";
 import { getSessionState } from "@/lib/agency.functions";
 import { getStockDay, saveStockEntries } from "@/lib/stock.functions";
 import { computeClosing, type StockInputs } from "@/lib/stock-math";
+import { ExportPdfButton } from "@/components/ExportPdfButton";
 
 type EditableField = "received_from_plant" | "received_from_consumer_refill" | "returned_to_plant";
 
@@ -202,13 +203,16 @@ function StockRegisterPage() {
               Daily Stock Register
             </h1>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/dashboard" })}
-            className="h-10 shrink-0 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            Dashboard
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ExportPdfButton register="stock" />
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="h-10 shrink-0 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              Dashboard
+            </button>
+          </div>
         </div>
       </header>
 
