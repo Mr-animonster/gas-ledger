@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { getSessionState, getActiveStaff } from "@/lib/agency.functions";
 import { listWages, saveWage } from "@/lib/distributor-registers.functions";
+import { ExportPdfButton } from "@/components/ExportPdfButton";
 
 export const Route = createFileRoute("/registers/wages")({
   head: () => ({
@@ -162,13 +163,16 @@ function WageRegisterPage() {
               Staff Wage Register
             </h1>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/dashboard" })}
-            className="h-10 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            Back
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ExportPdfButton register="wage" />
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="h-10 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              Back
+            </button>
+          </div>
         </div>
       </header>
 

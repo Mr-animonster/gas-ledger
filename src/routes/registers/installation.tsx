@@ -9,6 +9,7 @@ import { listInstallations, saveConsumer, saveInstallation } from "@/lib/install
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
 import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
+import { ExportPdfButton } from "@/components/ExportPdfButton";
 
 export const Route = createFileRoute("/registers/installation")({
   head: () => ({
@@ -211,13 +212,16 @@ function InstallationRegisterPage() {
               Installation &amp; ARB Register
             </h1>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/dashboard" })}
-            className="h-10 shrink-0 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            Dashboard
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ExportPdfButton register="installation" />
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="h-10 shrink-0 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              Dashboard
+            </button>
+          </div>
         </div>
       </header>
 

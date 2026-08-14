@@ -11,6 +11,7 @@ import { last4, maskedDisplay } from "@/lib/connection-mask";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
 import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
+import { ExportPdfButton } from "@/components/ExportPdfButton";
 
 export const Route = createFileRoute("/registers/connection")({
   head: () => ({
@@ -233,13 +234,16 @@ function ConnectionRegisterPage() {
               Connection / SV Register
             </h1>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/dashboard" })}
-            className="h-10 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            Back
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ExportPdfButton register="connection" />
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="h-10 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              Back
+            </button>
+          </div>
         </div>
       </header>
 

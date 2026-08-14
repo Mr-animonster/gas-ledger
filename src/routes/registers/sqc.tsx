@@ -11,6 +11,7 @@ import { getSessionState } from "@/lib/agency.functions";
 import { getPackageCodes } from "@/lib/reference.functions";
 import { getSqc, getSqcTolerance, listSqc, saveSqc } from "@/lib/sqc.functions";
 import { computeVariation, requiredSampleCount, withinTolerance } from "@/lib/sqc-math";
+import { ExportPdfButton } from "@/components/ExportPdfButton";
 
 type LineDraft = {
   cylinder_type_id: string;
@@ -251,13 +252,16 @@ function SqcRegisterPage() {
               SQC Register
             </h1>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/dashboard" })}
-            className="h-10 shrink-0 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            Dashboard
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ExportPdfButton register="sqc" />
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="h-10 shrink-0 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              Dashboard
+            </button>
+          </div>
         </div>
       </header>
 

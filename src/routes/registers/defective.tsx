@@ -10,6 +10,7 @@ import { getPackageCodes } from "@/lib/reference.functions";
 import { ConsumerSearch, type Consumer } from "@/components/ConsumerSearch";
 import { EntryLockCell, useEditedIds } from "@/components/EntryLockCell";
 import { FilledBySelect } from "@/components/FilledBySelect";
+import { ExportPdfButton } from "@/components/ExportPdfButton";
 
 export const Route = createFileRoute("/registers/defective")({
   head: () => ({
@@ -287,13 +288,16 @@ function DefectiveRegisterPage() {
               Defective Cylinder / DPR Register
             </h1>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate({ to: "/dashboard" })}
-            className="h-10 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
-          >
-            Back
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <ExportPdfButton register="defective" />
+            <button
+              type="button"
+              onClick={() => navigate({ to: "/dashboard" })}
+              className="h-10 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
+            >
+              Back
+            </button>
+          </div>
         </div>
       </header>
 
