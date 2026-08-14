@@ -8,8 +8,8 @@ function fmt(ts: string | null) {
   return new Date(ts).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour12: false });
 }
 
-/** Renders a register export payload to a PDF and triggers a download. */
-export function downloadRegisterPdf(payload: RegisterExportPayload) {
+/** Builds the register PDF document (shared by download and tests). */
+export function buildRegisterPdf(payload: RegisterExportPayload) {
   const doc = new jsPDF({ orientation: payload.orientation, unit: "pt", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
@@ -98,5 +98,11 @@ export function downloadRegisterPdf(payload: RegisterExportPayload) {
     });
   }
 
+  return doc;
+}
+
+/** Renders a register export payload to a PDF and triggers a download. */
+export function downloadRegisterPdf(payload: RegisterExportPayload) {
+  const doc = buildRegisterPdf(payload);
   doc.save(`${payload.key}-register-${payload.from}-to-${payload.to}.pdf`);
 }
