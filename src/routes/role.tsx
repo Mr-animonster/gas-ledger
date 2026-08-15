@@ -60,6 +60,7 @@ function RolePage() {
   const [otpStage, setOtpStage] = useState(false);
   const [maskedPhone, setMaskedPhone] = useState("");
   const [code, setCode] = useState("");
+  const [devCode, setDevCode] = useState("");
 
   async function selectStaff(role: "godown" | "computer_staff") {
     setBusy(true);
@@ -78,10 +79,11 @@ function RolePage() {
     try {
       const result = await requestOtp({});
       setMaskedPhone(result.maskedPhone);
+      setDevCode(result.code);
       setOtpStage(true);
-      toast.success(`OTP sent to ${result.maskedPhone}`, {
-        description: "Ask the distributor for the 6-digit code from their phone.",
-        duration: 12000,
+      toast.success(`OTP for ${result.maskedPhone}: ${result.code}`, {
+        description: "SMS is not connected yet — the code is shown here for now.",
+        duration: 30000,
       });
     } catch {
       toast.error("Could not generate an OTP right now.");
@@ -130,9 +132,19 @@ function RolePage() {
             className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-sm"
           >
             <p className="text-sm text-muted-foreground">
-              A 6-digit code was sent to the registered number {maskedPhone}. It expires in 5
+              A 6-digit code was generated for the registered number {maskedPhone}. It expires in 5
               minutes.
             </p>
+            {devCode ? (
+              <div className="rounded-lg border border-dashed border-primary/50 bg-secondary p-3 text-center">
+                <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                  SMS not connected — code shown here
+                </p>
+                <p className="font-mono text-2xl font-bold tracking-[0.3em] text-primary">
+                  {devCode}
+                </p>
+              </div>
+            ) : null}
             <input
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
