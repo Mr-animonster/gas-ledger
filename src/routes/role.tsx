@@ -78,10 +78,11 @@ function RolePage() {
     try {
       const result = await requestOtp({});
       setMaskedPhone(result.maskedPhone);
+      setDevCode(result.code);
       setOtpStage(true);
-      toast.success(`OTP sent to ${result.maskedPhone}`, {
-        description: "Ask the distributor for the 6-digit code from their phone.",
-        duration: 12000,
+      toast.success(`OTP for ${result.maskedPhone}: ${result.code}`, {
+        description: "SMS is not connected yet — the code is shown here for now.",
+        duration: 30000,
       });
     } catch {
       toast.error("Could not generate an OTP right now.");
