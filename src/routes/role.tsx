@@ -132,9 +132,19 @@ function RolePage() {
             className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-sm"
           >
             <p className="text-sm text-muted-foreground">
-              A 6-digit code was sent to the registered number {maskedPhone}. It expires in 5
+              A 6-digit code was generated for the registered number {maskedPhone}. It expires in 5
               minutes.
             </p>
+            {devCode ? (
+              <div className="rounded-lg border border-dashed border-primary/50 bg-secondary p-3 text-center">
+                <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                  SMS not connected — code shown here
+                </p>
+                <p className="font-mono text-2xl font-bold tracking-[0.3em] text-primary">
+                  {devCode}
+                </p>
+              </div>
+            ) : null}
             <input
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
