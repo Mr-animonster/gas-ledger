@@ -60,6 +60,7 @@ function RolePage() {
   const [otpStage, setOtpStage] = useState(false);
   const [maskedPhone, setMaskedPhone] = useState("");
   const [code, setCode] = useState("");
+  const [devCode, setDevCode] = useState("");
 
   async function selectStaff(role: "godown" | "computer_staff") {
     setBusy(true);
