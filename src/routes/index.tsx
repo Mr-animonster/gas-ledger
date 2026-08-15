@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Agency Login — LPG Register Book" },
       {
         property: "og:description",
-        content: "Sign in to maintain daily stock, SQC, sales and safety registers digitally.",
+        content: "Shared agency login for the LPG distributorship digital statutory register system.",
       },
     ],
   }),

@@ -78,14 +78,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Agency Login — LPG Register Book" },
+      { name: "description", content: "Shared agency login for the LPG distributorship digital statutory register system." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Agency Login — LPG Register Book" },
+      { property: "og:description", content: "Shared agency login for the LPG distributorship digital statutory register system." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Agency Login — LPG Register Book" },
+      { name: "twitter:description", content: "Shared agency login for the LPG distributorship digital statutory register system." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ce757968859c2d26f78480bb8cac8675/id-preview-d37da63e--ec1b6cd7-a15d-47e3-bdb5-9e3f2f3a00cf.lovable.app-1786793846795.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/ce757968859c2d26f78480bb8cac8675/id-preview-d37da63e--ec1b6cd7-a15d-47e3-bdb5-9e3f2f3a00cf.lovable.app-1786793846795.png" },
     ],
     links: [
       {
