@@ -125,12 +125,13 @@ export async function createDistributorOtp() {
   });
   if (insertError) throw new Error("Could not generate a verification code.");
 
-  // The code is delivered out-of-band to the distributor's registered phone only.
-  // It is deliberately never returned to the caller.
+  // No SMS provider is connected yet, so the code is shown in the app for now.
+  // Remove `code` from this response once SMS delivery is wired up.
   return {
     ok: true as const,
     maskedPhone: maskPhone(settings.phone_number),
     expiresAt,
+    code,
   };
 }
 
