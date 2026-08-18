@@ -104,20 +104,27 @@ function DashboardPage() {
   const visible = registers.filter((r) => r.roles.includes(role));
 
   return (
-    <main className="min-h-screen bg-background pb-14">
-      <header className="border-b border-border bg-card">
+    <main className="min-h-dvh pb-14">
+      <header className="sticky top-0 z-20 border-b border-border/70 bg-card/80 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-4 py-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-              {session.agencyName}
-            </p>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">{roleLabels[role]}</h1>
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="brand-gradient grid h-11 w-11 shrink-0 place-items-center rounded-xl text-xs font-bold text-primary-foreground shadow-md shadow-primary/25">
+              LPG
+            </div>
+            <div className="min-w-0">
+              <p className="truncate text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+                {session.agencyName}
+              </p>
+              <h1 className="truncate text-xl font-bold tracking-tight text-foreground">
+                {roleLabels[role]}
+              </h1>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <button
               type="button"
               onClick={() => navigate({ to: "/role" })}
-              className="h-10 rounded-lg border border-input bg-background px-3 text-sm font-medium text-foreground hover:bg-secondary"
+              className="h-10 rounded-xl border border-input bg-background/70 px-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
             >
               Switch role
             </button>
@@ -127,7 +134,7 @@ function DashboardPage() {
                 await logout({});
                 await navigate({ to: "/" });
               }}
-              className="h-10 rounded-lg px-3 text-sm font-medium text-muted-foreground hover:bg-secondary"
+              className="h-10 rounded-xl px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-secondary"
             >
               Sign out
             </button>
@@ -142,7 +149,7 @@ function DashboardPage() {
             <PendingEditRequests />
           </div>
         ) : null}
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        <h2 className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
           Registers
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -153,10 +160,13 @@ function DashboardPage() {
               onClick={() => {
                 if (register.to) void navigate({ to: register.to });
               }}
-              className="min-h-24 rounded-xl border border-border bg-card p-4 text-left shadow-sm transition-colors hover:border-primary hover:bg-secondary"
+              className="surface lift group relative min-h-24 overflow-hidden rounded-2xl p-4 text-left hover:border-primary/50"
             >
-              <span className="block text-base font-semibold text-foreground">{register.name}</span>
-              <span className="mt-1 block text-sm text-muted-foreground">{register.hint}</span>
+              <span className="brand-gradient absolute inset-y-0 left-0 w-1 opacity-70" />
+              <span className="block pl-2 text-base font-semibold text-foreground">
+                {register.name}
+              </span>
+              <span className="mt-1 block pl-2 text-sm text-muted-foreground">{register.hint}</span>
             </button>
           ))}
         </div>
@@ -164,3 +174,4 @@ function DashboardPage() {
     </main>
   );
 }
+
