@@ -55,24 +55,24 @@ function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-10">
+    <main className="flex min-h-dvh flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-2xl font-bold text-primary-foreground">
+          <div className="brand-gradient mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl text-xl font-bold tracking-tight text-primary-foreground shadow-lg shadow-primary/25">
             LPG
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Register Book</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Register Book</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
             Statutory registers for your distributorship
           </p>
         </div>
 
-        <form
-          onSubmit={onSubmit}
-          className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-sm"
-        >
+        <form onSubmit={onSubmit} className="surface space-y-4 rounded-2xl p-6">
           <div className="space-y-1.5">
-            <label htmlFor="agencyId" className="text-sm font-medium text-foreground">
+            <label
+              htmlFor="agencyId"
+              className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+            >
               Agency ID
             </label>
             <input
@@ -82,12 +82,15 @@ function LoginPage() {
               autoCapitalize="none"
               autoComplete="username"
               required
-              className="h-12 w-full rounded-lg border border-input bg-background px-3 text-base text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+              className="h-12 w-full rounded-xl border border-input bg-background/70 px-3.5 text-base text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/25"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="password" className="text-sm font-medium text-foreground">
+            <label
+              htmlFor="password"
+              className="text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+            >
               Password
             </label>
             <input
@@ -97,14 +100,14 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
               required
-              className="h-12 w-full rounded-lg border border-input bg-background px-3 text-base text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+              className="h-12 w-full rounded-xl border border-input bg-background/70 px-3.5 text-base text-foreground outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/25"
             />
           </div>
 
           <button
             type="submit"
             disabled={busy}
-            className="h-12 w-full rounded-lg bg-primary text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+            className="brand-gradient h-12 w-full rounded-xl text-base font-semibold text-primary-foreground shadow-md shadow-primary/25 transition-all hover:brightness-105 active:scale-[0.99] disabled:opacity-60"
           >
             {busy ? "Signing in…" : "Sign in"}
           </button>
@@ -117,3 +120,4 @@ function LoginPage() {
     </main>
   );
 }
+
