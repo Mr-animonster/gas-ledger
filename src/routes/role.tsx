@@ -115,29 +115,26 @@ function RolePage() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-10">
+    <main className="min-h-dvh px-4 py-10">
       <div className="mx-auto w-full max-w-md">
         <header className="mb-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             {session.agencyName}
           </p>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+          <h1 className="mt-1.5 text-2xl font-bold tracking-tight text-foreground">
             {otpStage ? "Distributor verification" : "Who is using the app?"}
           </h1>
         </header>
 
         {otpStage ? (
-          <form
-            onSubmit={submitOtp}
-            className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-sm"
-          >
+          <form onSubmit={submitOtp} className="surface space-y-4 rounded-2xl p-6">
             <p className="text-sm text-muted-foreground">
               A 6-digit code was generated for the registered number {maskedPhone}. It expires in 5
               minutes.
             </p>
             {devCode ? (
-              <div className="rounded-lg border border-dashed border-primary/50 bg-secondary p-3 text-center">
-                <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
+              <div className="rounded-xl border border-dashed border-primary/50 bg-secondary/70 p-3 text-center">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                   SMS not connected — code shown here
                 </p>
                 <p className="font-mono text-2xl font-bold tracking-[0.3em] text-primary">
@@ -151,19 +148,19 @@ function RolePage() {
               inputMode="numeric"
               autoFocus
               placeholder="000000"
-              className="h-14 w-full rounded-lg border border-input bg-background text-center text-2xl tracking-[0.5em] text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/30"
+              className="h-14 w-full rounded-xl border border-input bg-background/70 text-center text-2xl tracking-[0.5em] text-foreground outline-none focus:border-ring focus:ring-2 focus:ring-ring/25"
             />
             <button
               type="submit"
               disabled={busy || code.length < 6}
-              className="h-12 w-full rounded-lg bg-primary text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+              className="brand-gradient h-12 w-full rounded-xl text-base font-semibold text-primary-foreground shadow-md shadow-primary/25 transition-all hover:brightness-105 active:scale-[0.99] disabled:opacity-60"
             >
               Verify &amp; continue
             </button>
             <button
               type="button"
               onClick={() => setOtpStage(false)}
-              className="h-11 w-full rounded-lg border border-input bg-background text-sm font-medium text-foreground hover:bg-secondary"
+              className="h-11 w-full rounded-xl border border-input bg-background/70 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
             >
               Back to roles
             </button>
@@ -174,7 +171,7 @@ function RolePage() {
               type="button"
               onClick={startDistributor}
               disabled={busy}
-              className="flex w-full items-center justify-between rounded-xl border-2 border-primary bg-card p-5 text-left shadow-sm transition-colors hover:bg-secondary disabled:opacity-60"
+              className="surface lift flex w-full items-center justify-between rounded-2xl border-2 border-primary/60 p-5 text-left disabled:opacity-60"
             >
               <span>
                 <span className="block text-lg font-semibold text-foreground">Distributor</span>
@@ -182,7 +179,7 @@ function RolePage() {
                   Full access — OTP verification required
                 </span>
               </span>
-              <span className="rounded-md bg-accent px-2 py-1 text-xs font-semibold text-accent-foreground">
+              <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-accent-foreground">
                 OTP
               </span>
             </button>
@@ -193,7 +190,7 @@ function RolePage() {
                 type="button"
                 onClick={() => selectStaff(role.key)}
                 disabled={busy}
-                className="block w-full rounded-xl border border-border bg-card p-5 text-left shadow-sm transition-colors hover:bg-secondary disabled:opacity-60"
+                className="surface lift block w-full rounded-2xl p-5 text-left disabled:opacity-60"
               >
                 <span className="block text-lg font-semibold text-foreground">{role.title}</span>
                 <span className="block text-sm text-muted-foreground">{role.subtitle}</span>
@@ -201,6 +198,7 @@ function RolePage() {
             ))}
           </div>
         )}
+
 
         <button
           type="button"
